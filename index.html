@@ -50,7 +50,7 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 		dataType: 'json',
 		success: function(data){
 			// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
-			authtree.render('#LAY-auth-tree-index', data.data.trees, 'authids[]', 'lay-check-auth');
+			authtree.render('#LAY-auth-tree-index', data.data.trees, {inputname: 'authids[]', layfilter: 'lay-check-auth', openall: false});
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){

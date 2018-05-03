@@ -2,7 +2,7 @@
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   94468
-* @Last Modified time: 2018-03-30 12:24:37
+* @Last Modified time: 2018-05-03 15:13:02
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -17,13 +17,14 @@ layui.define(['jquery', 'form'], function(exports){
 		 * @param  {[type]} trees     [数据，格式：{}]
 		 * @param  {[type]} inputname [上传表单名]
 		 * @param  {[type]} layfilter [lay-filter的值]
+		 * @param  {[type]} openall [默认展开全部]
 		 * @return {[type]}           [description]
 		 */
-		render: function(dst, trees, inputname, layfilter){
-			var inputname = inputname ? inputname : 'menuids[]';
-			var layfilter = layfilter ? layfilter : 'checkauth';
-			var layfilter = layfilter ? layfilter : 'checkauth';
-			$(dst).html(obj.renderAuth(trees, 0, inputname, layfilter));
+		render: function(dst, trees, opt){
+			var inputname = opt.inputname ? opt.inputname : 'menuids[]';
+			var layfilter = opt.layfilter ? opt.layfilter : 'checkauth';
+			var openall = opt.openall ? opt.openall : false;
+			$(dst).html(obj.renderAuth(trees, 0, {inputname: inputname, layfilter: layfilter, openall: openall}));
 			form.render();
 			// 备注：如果使用form.on('checkbox()')，外部就无法使用form.on()监听同样的元素了（LAYUI不支持重复监听了）。
 			// form.on('checkbox('+layfilter+')', function(data){
@@ -65,15 +66,18 @@ layui.define(['jquery', 'form'], function(exports){
 			})
 		},
 		// 递归创建格式
-		renderAuth: function(tree, dept, inputname, layfilter){
+		renderAuth: function(tree, dept, opt){
+			var inputname = opt.inputname;
+			var layfilter = opt.layfilter;
+			var openall = opt.openall;
 			var str = '<div class="auth-single">';
 			layui.each(tree, function(index, item){
 				var hasChild = item.list ? 1 : 0;
 				// 注意：递归调用时，this的环境会改变！
-				var append = hasChild ? obj.renderAuth(item.list, dept+1, inputname, layfilter) : '';
+				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
-				str += '<div><div class="auth-status"> '+(hasChild?'<i class="layui-icon auth-icon" style="cursor:pointer;">&#xe623;</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+(dept > 0 ? '<span>├─ </span>':'')+'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+(item.checked?'checked="checked"':'')+'> </div> <div class="auth-child" style="display:none;padding-left:40px;"> '+append+'</div></div>'
+				str += '<div><div class="auth-status"> '+(hasChild?'<i class="layui-icon auth-icon '+(openall?'active':'')+'" style="cursor:pointer;">'+(openall?'&#xe625;':'&#xe623;')+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+(dept > 0 ? '<span>├─ </span>':'')+'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+(item.checked?'checked="checked"':'')+'> </div> <div class="auth-child" style="'+(openall?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
 			str += '</div>';
 			return str;
