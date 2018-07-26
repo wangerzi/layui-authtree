@@ -55,9 +55,15 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
-				// 获取所有已选中节点
-				var all = authtree.getChecked('#LAY-auth-tree-index');
+				// 获取所有节点
+				var all = authtree.getAll('#LAY-auth-tree-index');
 				console.log('all', all);
+				// 获取所有已选中节点
+				var checked = authtree.getChecked('#LAY-auth-tree-index');
+				console.log('checked', checked);
+				// 获取所有未选中节点
+				var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+				console.log('notchecked', notchecked);
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
 					// 获取选中的叶子节点

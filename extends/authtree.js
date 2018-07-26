@@ -2,7 +2,7 @@
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   94468
-* @Last Modified time: 2018-07-26 09:09:31
+* @Last Modified time: 2018-07-26 09:17:14
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -94,8 +94,28 @@ layui.define(['jquery', 'form'], function(exports){
 			return data;
 		},
 		// 获取所有选中的数据
+		getAll: function(dst){
+			var inputs = $(dst).find('input[type="checkbox"]');
+			var data = [];
+			inputs.each(function(index, item){
+				data.push(item.value);
+			});
+			// console.log(data);
+			return data;
+		},
+		// 获取所有选中的数据
 		getChecked: function(dst){
 			var inputs = $(dst).find('input[type="checkbox"]:checked');
+			var data = [];
+			inputs.each(function(index, item){
+				data.push(item.value);
+			});
+			// console.log(data);
+			return data;
+		},
+		// 获取未选中数据
+		getNotChecked: function(dst){
+			var inputs = $(dst).find('input[type="checkbox"]:not(:checked)');
 			var data = [];
 			inputs.each(function(index, item){
 				data.push(item.value);
