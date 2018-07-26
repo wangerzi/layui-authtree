@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>权限树扩展分享</title>
 	<link rel="stylesheet" type="text/css" href="layui/css/layui.css">
 	<script type="text/javascript" src="layui/layui.js"></script>
@@ -54,11 +55,14 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
+				// 获取所有已选中节点
+				var all = authtree.getChecked('#LAY-auth-tree-index');
+				console.log('all', all);
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
 					// 获取选中的叶子节点
 					var leaf = authtree.getLeaf('#LAY-auth-tree-index');
-					console.log(leaf);
+					console.log('leaf', leaf);
 				}, 100);
 			});
 		}
