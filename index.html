@@ -27,7 +27,7 @@
 				</div>
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<button class="layui-btn" type="submit">提交</button>
+						<button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">提交</button>
 						<button class="layui-btn layui-btn-primary" type="reset">重置</button>
 					</div>
 				</div>
@@ -42,10 +42,12 @@ layui.config({
 }).extend({
 	authtree: 'authtree',
 });
-layui.use(['jquery', 'authtree', 'form'], function(){
+layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 	var $ = layui.jquery;
 	var authtree = layui.authtree;
 	var form = layui.form;
+	var layer = layui.layer;
+	// 初始化
 	$.ajax({
 		url: 'tree.json',
 		dataType: 'json',
@@ -72,7 +74,20 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 				}, 100);
 			});
 		}
-	})
+	});
+	form.on('submit(LAY-auth-tree-submit)', function(obj){
+		var authids = authtree.getAll('#LAY-auth-tree-index');
+		console.log('Choosed authids is', authids);
+		$.ajax({
+			url: 'tree.json',
+			dataType: 'json',
+			data: authids,
+			success: function(res){
+				layer.alert('提交成功！');
+			}
+		});
+		return false;
+	});
 });
 </script>
 </html>
