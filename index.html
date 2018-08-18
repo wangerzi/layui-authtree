@@ -78,10 +78,11 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 	form.on('submit(LAY-auth-tree-submit)', function(obj){
 		var authids = authtree.getAll('#LAY-auth-tree-index');
 		console.log('Choosed authids is', authids);
+		obj.field.authids = authids;
 		$.ajax({
 			url: 'tree.json',
 			dataType: 'json',
-			data: authids,
+			data: obj.field,
 			success: function(res){
 				layer.alert('提交成功！');
 			}
