@@ -1,8 +1,8 @@
 /*
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
-* @Last Modified by:   94468
-* @Last Modified time: 2018-07-26 09:17:14
+* @Last Modified by:   Jeffrey Wang
+* @Last Modified time: 2018-09-06 13:50:07
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -24,8 +24,29 @@ layui.define(['jquery', 'form'], function(exports){
 			var inputname = opt.inputname ? opt.inputname : 'menuids[]';
 			var layfilter = opt.layfilter ? opt.layfilter : 'checkauth';
 			var openall = opt.openall ? opt.openall : false;
+			var autowidth = opt.autowidth !== false ? true : false;
+
 			$(dst).html(obj.renderAuth(trees, 0, {inputname: inputname, layfilter: layfilter, openall: openall}));
 			form.render();
+
+			// 如果开启自动宽度优化
+			if (autowidth) {
+				$(dst).css({
+					'whiteSpace': 'nowrap',
+					'maxWidth' : '100%',
+				});
+				$(dst).find('.layui-form-checkbox').each(function(index, item){
+					if ($(this).is(':hidden')) {
+						// 比较奇葩的获取宽度的手法，请见谅
+						$('body').append('<div id="layui-authtree-get-width">'+$(this).html()+'</div>');
+						$width = $('#layui-authtree-get-width').find('span').width() + $('#layui-authtree-get-width').find('i').width() + 25;
+						$('#layui-authtree-get-width').remove();
+					} else {
+						$width = $(this).find('span').width() + $(this).find('i').width() + 25;
+					}
+					$(this).width($width);
+				});
+			}
 			// 备注：如果使用form.on('checkbox()')，外部就无法使用form.on()监听同样的元素了（LAYUI不支持重复监听了）。
 			// form.on('checkbox('+layfilter+')', function(data){
 			// 	/*属下所有权限状态跟随，如果选中，往上走全部选中*/

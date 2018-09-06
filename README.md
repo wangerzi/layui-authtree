@@ -19,6 +19,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 5. 支持自定义表单名称（上传数据的name）
 6. 支持自定义lay-filter用于监听权限树选中(v0.2新增)
 7. 支持获取选中叶子结点信息(v0.2新增)
+8. 自适应标签名字长度配置(v0.5新增)
 
 ## 使用方法：
 
@@ -43,7 +44,12 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 		dataType: 'json',
 		success: function(data){
 			// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
-			authtree.render('#LAY-auth-tree-index', data.data.trees, {inputname: 'authids[]', layfilter: 'lay-check-auth', openall: false});
+			authtree.render('#LAY-auth-tree-index', data.data.trees, {
+				inputname: 'authids[]', 
+				layfilter: 'lay-check-auth', 
+				// openall: true,
+				autowidth: true,
+			});
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
@@ -115,6 +121,8 @@ extends/authtree.js	权限树扩展
 layui/				官网下载的layui
 
 ## 更新记录：
+
+2018-09-06 v0.5 新增authwidth参数用于适应节点名称宽度，默认true
 
 2018-05-03 v0.4 新增获取全部数据、全部已选数据、全部未选数据方法，修复编码问题。
 
