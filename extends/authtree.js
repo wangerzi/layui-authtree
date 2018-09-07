@@ -2,7 +2,7 @@
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-09-06 13:50:07
+* @Last Modified time: 2018-09-07 21:12:50
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -11,6 +11,8 @@ layui.define(['jquery', 'form'], function(exports){
 
 	obj = {
 		// 渲染 + 绑定事件
+		openIconContent: '&#xe625;',
+		closeIconContent: '&#xe623;',
 		/**
 		 * 渲染DOM并绑定事件
 		 * @param  {[type]} dst       [目标ID，如：#test1]
@@ -76,11 +78,11 @@ layui.define(['jquery', 'form'], function(exports){
 				var child = origin.parent().parent().find('.auth-child:first');
 				if(origin.is('.active')){
 					/*收起*/
-					origin.removeClass('active').html('&#xe623;');
+					origin.removeClass('active').html(obj.closeIconContent);
 					child.slideUp('fast');
 				} else {
 					/*展开*/
-					origin.addClass('active').html('&#xe625;');
+					origin.addClass('active').html(obj.openIconContent);
 					child.slideDown('fast');
 				}
 				return false;
@@ -98,10 +100,48 @@ layui.define(['jquery', 'form'], function(exports){
 				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
-				str += '<div><div class="auth-status"> '+(hasChild?'<i class="layui-icon auth-icon '+(openall?'active':'')+'" style="cursor:pointer;">'+(openall?'&#xe625;':'&#xe623;')+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+(dept > 0 ? '<span>├─ </span>':'')+'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+(item.checked?'checked="checked"':'')+'> </div> <div class="auth-child" style="'+(openall?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
+				str += '<div><div class="auth-status"> '+
+					(hasChild?'<i class="layui-icon auth-icon '+(openall?'active':'')+'" style="cursor:pointer;">'+(openall?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+
+					(dept > 0 ? '<span>├─ </span>':'')+
+					'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
+					(item.checked?'checked="checked"':'')+'> </div>'+
+					' <div class="auth-child" style="'+(openall?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
 			str += '</div>';
 			return str;
+		},
+		// 显示到第 dept 层
+		showDept: function(dst, dept = 2) {
+			if(dept <= 1){
+				return ;
+			}
+			var next = $(dst).find('.auth-single:first>div>.auth-child>.auth-single:first');
+			if (next.length) {
+				this._showSingle(next);
+				this.showDept(next, dept-1);
+			}
+		},
+		// 显示某层 single
+		_showSingle: function(dst) {
+			var origin = $(dst);
+			var parentChild = origin.parent();
+			var parentStatus = parentChild.prev();
+			if (!parentStatus.find('.auth-icon').hasClass('active')) {
+				parentChild.show();
+				// 显示上级的 .auth-child节点，并修改.auth-status的折叠状态
+				parentStatus.find('.auth-icon').addClass('active').html(obj.openIconContent);
+			}
+		},
+		// 关闭某层 single
+		_closeSingle: function(dst) {
+			var origin = $(dst);
+			var parentChild = origin.parent();
+			var parentStatus = parentChild.prev();
+			if (!parentStatus.find('.auth-icon').hasClass('active')) {
+				parentChild.show();
+				// 显示上级的 .auth-child节点，并修改.auth-status的折叠状态
+				parentStatus.find('.auth-icon').addClass('active').html(obj.closeIconContent);
+			}
 		},
 		// 获取选中叶子结点
 		getLeaf: function(dst){

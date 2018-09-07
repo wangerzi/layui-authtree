@@ -59,6 +59,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 				// openall: true,
 				autowidth: true,
 			});
+			authtree.showDept('#LAY-auth-tree-index', 10);
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
