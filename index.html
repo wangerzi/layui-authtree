@@ -9,6 +9,22 @@
 <body>
 <div class="layui-container">
 	<div class="layui-row">
+		<div class="layui-col-md11 layui-col-md-offset1">
+			<fieldset class="layui-elem-field layui-field-title"><legend>权限操作演示</legend></fieldset>
+			<div class="layui-form">
+				<div class="layui-form-item">
+					<div class="layui-form-label">权限操作</div>
+					<div class="layui-form-block">
+						<button type="button" class="layui-btn layui-btn-primary" onclick="getMaxDept('#LAY-auth-tree-index')">获取树的深度</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="checkAll('#LAY-auth-tree-index')">全选</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="uncheckAll('#LAY-auth-tree-index')">全不选</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="showAll('#LAY-auth-tree-index')">全部展开</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="closeAll('#LAY-auth-tree-index')">全部隐藏</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="getNodeStatus('#LAY-auth-tree-index')">获取节点状态</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="layui-col-md6 layui-col-md-offset1">
 			<fieldset class="layui-elem-field layui-field-title"><legend>权限树扩展分享</legend></fieldset>
 			<!-- 此扩展能递归渲染一个权限树，点击深层次节点，父级节点中没有被选中的节点会被自动选中，单独点击父节点，子节点会全部 选中/去选中 -->
@@ -59,21 +75,20 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 				// openall: true,
 				autowidth: true,
 			});
-			authtree.showDept('#LAY-auth-tree-index', 10);
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
-				// 获取所有节点
-				var all = authtree.getAll('#LAY-auth-tree-index');
-				console.log('all', all);
-				// 获取所有已选中节点
-				var checked = authtree.getChecked('#LAY-auth-tree-index');
-				console.log('checked', checked);
-				// 获取所有未选中节点
-				var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
-				console.log('notchecked', notchecked);
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
+					// 获取所有节点
+					var all = authtree.getAll('#LAY-auth-tree-index');
+					console.log('all', all);
+					// 获取所有已选中节点
+					var checked = authtree.getChecked('#LAY-auth-tree-index');
+					console.log('checked', checked);
+					// 获取所有未选中节点
+					var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+					console.log('notchecked', notchecked);
 					// 获取选中的叶子节点
 					var leaf = authtree.getLeaf('#LAY-auth-tree-index');
 					console.log('leaf', leaf);
@@ -96,5 +111,61 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 		return false;
 	});
 });
+</script>
+<script type="text/javascript">
+// 获取最大深度样例
+function getMaxDept(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		layer.alert(authtree.getMaxDept(dst));
+	});
+}
+// 全选样例
+function checkAll(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		authtree.checkAll(dst);
+	});
+}
+// 全不选样例
+function uncheckAll(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		authtree.uncheckAll(dst);
+	});
+}
+// 显示全部
+function showAll(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		authtree.showAll(dst);
+	});
+}
+// 隐藏全部
+function closeAll(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		authtree.closeAll(dst);
+	});
+}
+// 获取节点状态
+function getNodeStatus(dst){
+	layui.use(['jquery', 'layer', 'authtree'], function(){
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+
+		// authtree.closeAll(dst);
+	});
+}
 </script>
 </html>

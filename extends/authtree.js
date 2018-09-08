@@ -1,8 +1,8 @@
 /*
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
-* @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-09-07 21:12:50
+* @Last Modified by:   94468
+* @Last Modified time: 2018-09-09 02:00:38
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -94,6 +94,7 @@ layui.define(['jquery', 'form'], function(exports){
 			var layfilter = opt.layfilter;
 			var openall = opt.openall;
 			var str = '<div class="auth-single">';
+
 			layui.each(tree, function(index, item){
 				var hasChild = item.list ? 1 : 0;
 				// 注意：递归调用时，this的环境会改变！
@@ -110,20 +111,98 @@ layui.define(['jquery', 'form'], function(exports){
 			str += '</div>';
 			return str;
 		},
+		// 动态获取最大深度
+		getMaxDept: function(dst){
+			var next = $(dst);
+			var dept = 1;
+			while(next.length && dept < 100000) {
+				next = this._getNext(next);
+				if (next.length) {
+					dept++;
+				} else {
+					break;
+				}
+			}
+			return dept;
+		},
+		// 全选
+		checkAll: function(dst){
+			var origin = $(dst);
+			// 控制好第一层即可
+			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
+				if ($(this).is(':checked')) {
+					$(this).next().click().click();
+				} else {
+					$(this).next().click();
+				}
+			});
+		},
+		// 全不选
+		uncheckAll: function(dst){
+			var origin = $(dst);
+			// 控制好第一层即可
+			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
+				if ($(this).is(':checked')) {
+					$(this).next().click();
+				} else {
+					// $(this).parent().click().click();
+				}
+			});
+		},
+		// 显示整个树
+		showAll: function(dst) {
+			this.showDept(dst, this.getMaxDept(dst));
+		},
+		// 关闭整颗树
+		closeAll: function(dst) {
+			this.closeDept(dst, 1);
+		},
+		// 切换整颗树的显示/关闭
+		toggleAll: function(dst) {
+			if (this._shownDept(2)) {
+				this.closeDept(dst);
+			} else {
+				this.showAll(dst);
+			}
+		},
 		// 显示到第 dept 层
 		showDept: function(dst, dept = 2) {
-			if(dept <= 1){
-				return ;
+			var next = $(dst);
+			for(var i = 1; i < dept; i++) {
+				next = this._getNext(next);
+				if (next.length) {
+					this._showSingle(next);
+				} else {
+					break;
+				}
 			}
-			var next = $(dst).find('.auth-single:first>div>.auth-child>.auth-single:first');
-			if (next.length) {
-				this._showSingle(next);
-				this.showDept(next, dept-1);
+		},
+		// 第 dept 层之后全部关闭
+		closeDept: function(dst, dept = 2) {
+			var next = $(dst);
+			for(var i = 0; i < dept; i++){
+				next = this._getNext(next);
 			}
+			while(next.length) {
+				this._closeSingle(next);
+				next = this._getNext(next);
+			}
+		},
+		// 判断某一层是否显示
+		_shownDept: function(dst, dept) {
+			var next = $(dst);
+			for(var i = 0; i < dept; i++){
+				next = this._getNext(next);
+			}
+			return !next.is(':hidden');
+		},
+		// 获取
+		_getNext: function(dst) {
+			return $(dst).find('.auth-single:first>div>.auth-child');
 		},
 		// 显示某层 single
 		_showSingle: function(dst) {
-			var origin = $(dst);
+			var origin = $(dst).find('.auth-single:first');
 			var parentChild = origin.parent();
 			var parentStatus = parentChild.prev();
 			if (!parentStatus.find('.auth-icon').hasClass('active')) {
@@ -134,13 +213,13 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 关闭某层 single
 		_closeSingle: function(dst) {
-			var origin = $(dst);
+			var origin = $(dst).find('.auth-single:first');
 			var parentChild = origin.parent();
 			var parentStatus = parentChild.prev();
-			if (!parentStatus.find('.auth-icon').hasClass('active')) {
-				parentChild.show();
+			if (parentStatus.find('.auth-icon').hasClass('active')) {
+				parentChild.hide();
 				// 显示上级的 .auth-child节点，并修改.auth-status的折叠状态
-				parentStatus.find('.auth-icon').addClass('active').html(obj.closeIconContent);
+				parentStatus.find('.auth-icon').removeClass('active').html(obj.closeIconContent);
 			}
 		},
 		// 获取选中叶子结点
