@@ -10,6 +10,28 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ![功能演示](http://cdn.layui.com/upload/2018_3/11634672_1521798883089_97713.gif)
 
+## 函数列表
+
+| 函数名                  | 描述                                                |
+| ----------------------- | --------------------------------------------------- |
+| render(dst, trees, opt) | 初始化一棵权限树                                    |
+| getMaxDept(dst)         | 获取树的最大深度                                    |
+| checkAll(dst)           | 全选所有节点                                        |
+| uncheckAll(dst)         | 取消选中所有节点                                    |
+| showAll(dst)            | 显示整颗树                                          |
+| closeAll(dst)           | 关闭整颗树                                          |
+| toggleAll(dst)          | 树的显示/关闭切换                                   |
+| showDept(dst, dept)     | 显示此树到第 dept 层                                |
+| closeDept(dst, dept)    | 第 dept 层之后全部关闭                              |
+| getLeaf(dst)            | 获取叶子节点（需延迟获取）                          |
+| getAll(dst)             | 获取所有节点数据（需延迟获取）                      |
+| getLastChecked(dst)     | 最新选中节点数据（之前未选-现在选中）（需延迟获取） |
+| getChecked(dst)         | 获取所有选中节点的数据（需延迟获取）                |
+| getLastNotChecked(dst)  | 最新取消（之前选中-现在未选）（需延迟获取）         |
+| getNotChecked(dst)      | 获取未选中数据（需延迟获取）                        |
+
+
+
 ## 功能概览：
 
 1. 支持无限级渲染结构树
@@ -121,6 +143,8 @@ extends/authtree.js	权限树扩展
 layui/				官网下载的layui
 
 ## 更新记录：
+
+2018-09-19 v1.0 完善权限树的方法，新增方法请见函数列表和演示样例
 
 2018-09-06 v0.5 新增authwidth参数用于适应节点名称宽度，默认true
 

@@ -92,6 +92,12 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 					// 获取选中的叶子节点
 					var leaf = authtree.getLeaf('#LAY-auth-tree-index');
 					console.log('leaf', leaf);
+					// 获取最新选中
+					var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+					console.log('lastChecked', lastChecked);
+					// 获取最新取消
+					var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+					console.log('lastNotChecked', lastNotChecked);
 				}, 100);
 			});
 		}
@@ -119,7 +125,7 @@ function getMaxDept(dst){
 		var layer = layui.layer;
 		var authtree = layui.authtree;
 
-		layer.alert(authtree.getMaxDept(dst));
+		layer.alert('树'+dst+'的最大深度为：'+authtree.getMaxDept(dst));
 	});
 }
 // 全选样例
@@ -160,12 +166,69 @@ function closeAll(dst){
 }
 // 获取节点状态
 function getNodeStatus(dst){
-	layui.use(['jquery', 'layer', 'authtree'], function(){
+	layui.use(['jquery', 'layer', 'authtree', 'laytpl'], function(){
 		var layer = layui.layer;
 		var authtree = layui.authtree;
+		var laytpl = layui.laytpl;
 
-		// authtree.closeAll(dst);
+		// 获取所有节点
+		var all = authtree.getAll('#LAY-auth-tree-index');
+		// 获取所有已选中节点
+		var checked = authtree.getChecked('#LAY-auth-tree-index');
+		// 获取所有未选中节点
+		var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+		// 获取选中的叶子节点
+		var leaf = authtree.getLeaf('#LAY-auth-tree-index');
+		// 获取最新选中
+		var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+		// 获取最新取消
+		var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+
+		var data = [
+			{func: 'getAll', desc: '获取所有节点', data: all},
+			{func: 'getChecked', desc: '获取所有已选中节点', data: checked},
+			{func: 'getNotChecked', desc: '获取所有未选中节点', data: notchecked},
+			{func: 'getLeaf', desc: '获取选中的叶子节点', data: leaf},
+			{func: 'getLastChecked', desc: '获取最新选中', data: lastChecked},
+			{func: 'getLastNotChecked', desc: '获取最新取消', data: lastNotChecked},
+		];
+
+		var string =  laytpl($('#LAY-auth-tree-nodes').html()).render({
+			data: data,
+		});
+		layer.open({
+			title: '节点状态'
+			,content: string
+			,area: '800px'
+			,tipsMore: true
+		});
+		$('body').on('click', '.LAY-auth-tree-show-detail', function(){
+			layer.open({
+				title: '节点详情',
+				content: '['+$(this).data('content')+']',
+				tipsMore: true
+			});
+		});
 	});
 }
+</script>
+<!-- 状态模板 -->
+<script type="text/html" id="LAY-auth-tree-nodes">
+	<table class="layui-table">
+		<thead>
+			<th>方法名</th>
+			<th>描述</th>
+			<th>节点</th>
+		</thead>
+		<tbody>
+			{{# layui.each(d.data, function(index, item) { }}
+			<tr>
+				<td>{{item.func}}</td>
+				<td>{{item.desc}}</td>
+				<td><a class="LAY-auth-tree-show-detail" href="javascript:;" data-content="{{item.data.join(']<br>[')}}">查看详情</a>({{item.data.length}})</td>
+			</tr>
+			{{# });}}
+		</tbody>
+	</table>
 </script>
 </html>

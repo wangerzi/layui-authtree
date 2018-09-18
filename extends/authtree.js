@@ -1,8 +1,8 @@
 /*
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
-* @Last Modified by:   94468
-* @Last Modified time: 2018-09-09 02:00:38
+* @Last Modified by:   Jeffrey Wang
+* @Last Modified time: 2018-09-18 20:44:36
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -13,6 +13,8 @@ layui.define(['jquery', 'form'], function(exports){
 		// 渲染 + 绑定事件
 		openIconContent: '&#xe625;',
 		closeIconContent: '&#xe623;',
+		checkedNode : [],
+		notCheckedNode : [],
 		/**
 		 * 渲染DOM并绑定事件
 		 * @param  {[type]} dst       [目标ID，如：#test1]
@@ -29,6 +31,8 @@ layui.define(['jquery', 'form'], function(exports){
 			var autowidth = opt.autowidth !== false ? true : false;
 
 			$(dst).html(obj.renderAuth(trees, 0, {inputname: inputname, layfilter: layfilter, openall: openall}));
+			// 变动则存一下临时状态
+			obj._saveNodeStatus(dst);
 			form.render();
 
 			// 如果开启自动宽度优化
@@ -39,7 +43,7 @@ layui.define(['jquery', 'form'], function(exports){
 				});
 				$(dst).find('.layui-form-checkbox').each(function(index, item){
 					if ($(this).is(':hidden')) {
-						// 比较奇葩的获取宽度的手法，请见谅
+						// 比较奇葩的获取隐藏元素宽度的手法，请见谅
 						$('body').append('<div id="layui-authtree-get-width">'+$(this).html()+'</div>');
 						$width = $('#layui-authtree-get-width').find('span').width() + $('#layui-authtree-get-width').find('i').width() + 25;
 						$('#layui-authtree-get-width').remove();
@@ -63,6 +67,10 @@ layui.define(['jquery', 'form'], function(exports){
 			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox', function(){
 				var elem = $(this).prev();
 				var checked = elem.is(':checked');
+
+				// 变动则存一下临时状态
+				obj._saveNodeStatus(dst);
+
 				var childs = elem.parent().next().find('input[type="checkbox"]').prop('checked', checked);
 				if(checked){
 					/*查找child的前边一个元素，并将里边的checkbox选中状态改为true。*/
@@ -131,7 +139,8 @@ layui.define(['jquery', 'form'], function(exports){
 			// 控制好第一层即可
 			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
 				if ($(this).is(':checked')) {
-					$(this).next().click().click();
+					// 如果不更新checked状态，，容易产生状态读取错误的卡顿BUG
+					$(this).prop('checked', true).next().click(function(){$(this).click()});
 				} else {
 					$(this).next().click();
 				}
@@ -143,7 +152,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// 控制好第一层即可
 			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
 				if ($(this).is(':checked')) {
-					$(this).next().click();
+					$(this).prop('checked', true).next().click();
 				} else {
 					// $(this).parent().click().click();
 				}
@@ -166,7 +175,7 @@ layui.define(['jquery', 'form'], function(exports){
 			}
 		},
 		// 显示到第 dept 层
-		showDept: function(dst, dept = 2) {
+		showDept: function(dst, dept) {
 			var next = $(dst);
 			for(var i = 1; i < dept; i++) {
 				next = this._getNext(next);
@@ -178,7 +187,7 @@ layui.define(['jquery', 'form'], function(exports){
 			}
 		},
 		// 第 dept 层之后全部关闭
-		closeDept: function(dst, dept = 2) {
+		closeDept: function(dst, dept) {
 			var next = $(dst);
 			for(var i = 0; i < dept; i++){
 				next = this._getNext(next);
@@ -187,6 +196,11 @@ layui.define(['jquery', 'form'], function(exports){
 				this._closeSingle(next);
 				next = this._getNext(next);
 			}
+		},
+		// 临时保存所有节点信息状态
+		_saveNodeStatus: function(dst){
+			this.checkedNode = this.getChecked(dst);
+			this.notCheckedNode = this.getNotChecked(dst);
 		},
 		// 判断某一层是否显示
 		_shownDept: function(dst, dept) {
@@ -233,7 +247,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// console.log(data);
 			return data;
 		},
-		// 获取所有选中的数据
+		// 获取所有节点数据
 		getAll: function(dst){
 			var inputs = $(dst).find('input[type="checkbox"]');
 			var data = [];
@@ -241,6 +255,18 @@ layui.define(['jquery', 'form'], function(exports){
 				data.push(item.value);
 			});
 			// console.log(data);
+			return data;
+		},
+		// 最新选中（之前取消-现在选中）
+		getLastChecked: function(dst) {
+			var lastCheckedNode = this.getChecked();
+
+			var data = [];
+			for (i in lastCheckedNode) {
+				if ($.inArray(lastCheckedNode[i], this.notCheckedNode)) {
+					data.push(lastCheckedNode[i]);
+				}
+			}
 			return data;
 		},
 		// 获取所有选中的数据
@@ -251,6 +277,18 @@ layui.define(['jquery', 'form'], function(exports){
 				data.push(item.value);
 			});
 			// console.log(data);
+			return data;
+		},
+		// 最新取消（之前选中-现在取消）
+		getLastNotChecked: function(dst) {
+			var lastNotCheckedNode = this.getNotChecked();
+
+			var data = [];
+			for (i in lastNotCheckedNode) {
+				if ($.inArray(lastNotCheckedNode[i], this.checkedNode)) {
+					data.push(lastNotCheckedNode[i]);
+				}
+			}
 			return data;
 		},
 		// 获取未选中数据
