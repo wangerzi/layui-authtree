@@ -2,26 +2,26 @@
 * @Author: 94468
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-09-18 20:44:36
+* @Last Modified time: 2018-09-19 14:04:28
 */
-// èŠ‚ç‚¹æ ‘
+// ½ÚµãÊ÷
 layui.define(['jquery', 'form'], function(exports){
 	$ = layui.jquery;
 	form = layui.form;
 
 	obj = {
-		// æ¸²æŸ“ + ç»‘å®šäº‹ä»¶
+		// äÖÈ¾ + °ó¶¨ÊÂ¼ş
 		openIconContent: '&#xe625;',
 		closeIconContent: '&#xe623;',
 		checkedNode : [],
 		notCheckedNode : [],
 		/**
-		 * æ¸²æŸ“DOMå¹¶ç»‘å®šäº‹ä»¶
-		 * @param  {[type]} dst       [ç›®æ ‡IDï¼Œå¦‚ï¼š#test1]
-		 * @param  {[type]} trees     [æ•°æ®ï¼Œæ ¼å¼ï¼š{}]
-		 * @param  {[type]} inputname [ä¸Šä¼ è¡¨å•å]
-		 * @param  {[type]} layfilter [lay-filterçš„å€¼]
-		 * @param  {[type]} openall [é»˜è®¤å±•å¼€å…¨éƒ¨]
+		 * äÖÈ¾DOM²¢°ó¶¨ÊÂ¼ş
+		 * @param  {[type]} dst       [Ä¿±êID£¬Èç£º#test1]
+		 * @param  {[type]} trees     [Êı¾İ£¬¸ñÊ½£º{}]
+		 * @param  {[type]} inputname [ÉÏ´«±íµ¥Ãû]
+		 * @param  {[type]} layfilter [lay-filterµÄÖµ]
+		 * @param  {[type]} openall [Ä¬ÈÏÕ¹¿ªÈ«²¿]
 		 * @return {[type]}           [description]
 		 */
 		render: function(dst, trees, opt){
@@ -31,11 +31,11 @@ layui.define(['jquery', 'form'], function(exports){
 			var autowidth = opt.autowidth !== false ? true : false;
 
 			$(dst).html(obj.renderAuth(trees, 0, {inputname: inputname, layfilter: layfilter, openall: openall}));
-			// å˜åŠ¨åˆ™å­˜ä¸€ä¸‹ä¸´æ—¶çŠ¶æ€
-			obj._saveNodeStatus(dst);
 			form.render();
+			// ±ä¶¯Ôò´æÒ»ÏÂÁÙÊ±×´Ì¬
+			obj._saveNodeStatus(dst);
 
-			// å¦‚æœå¼€å¯è‡ªåŠ¨å®½åº¦ä¼˜åŒ–
+			// Èç¹û¿ªÆô×Ô¶¯¿í¶ÈÓÅ»¯
 			if (autowidth) {
 				$(dst).css({
 					'whiteSpace': 'nowrap',
@@ -43,7 +43,7 @@ layui.define(['jquery', 'form'], function(exports){
 				});
 				$(dst).find('.layui-form-checkbox').each(function(index, item){
 					if ($(this).is(':hidden')) {
-						// æ¯”è¾ƒå¥‡è‘©çš„è·å–éšè—å…ƒç´ å®½åº¦çš„æ‰‹æ³•ï¼Œè¯·è§è°…
+						// ±È½ÏÆæİâµÄ»ñÈ¡Òş²ØÔªËØ¿í¶ÈµÄÊÖ·¨£¬Çë¼ûÁÂ
 						$('body').append('<div id="layui-authtree-get-width">'+$(this).html()+'</div>');
 						$width = $('#layui-authtree-get-width').find('span').width() + $('#layui-authtree-get-width').find('i').width() + 25;
 						$('#layui-authtree-get-width').remove();
@@ -53,12 +53,12 @@ layui.define(['jquery', 'form'], function(exports){
 					$(this).width($width);
 				});
 			}
-			// å¤‡æ³¨ï¼šå¦‚æœä½¿ç”¨form.on('checkbox()')ï¼Œå¤–éƒ¨å°±æ— æ³•ä½¿ç”¨form.on()ç›‘å¬åŒæ ·çš„å…ƒç´ äº†ï¼ˆLAYUIä¸æ”¯æŒé‡å¤ç›‘å¬äº†ï¼‰ã€‚
+			// ±¸×¢£ºÈç¹ûÊ¹ÓÃform.on('checkbox()')£¬Íâ²¿¾ÍÎŞ·¨Ê¹ÓÃform.on()¼àÌıÍ¬ÑùµÄÔªËØÁË£¨LAYUI²»Ö§³ÖÖØ¸´¼àÌıÁË£©¡£
 			// form.on('checkbox('+layfilter+')', function(data){
-			// 	/*å±ä¸‹æ‰€æœ‰æƒé™çŠ¶æ€è·Ÿéšï¼Œå¦‚æœé€‰ä¸­ï¼Œå¾€ä¸Šèµ°å…¨éƒ¨é€‰ä¸­*/
+			// 	/*ÊôÏÂËùÓĞÈ¨ÏŞ×´Ì¬¸úËæ£¬Èç¹ûÑ¡ÖĞ£¬ÍùÉÏ×ßÈ«²¿Ñ¡ÖĞ*/
 			// 	var childs = $(data.elem).parent().next().find('input[type="checkbox"]').prop('checked', data.elem.checked);
 			// 	if(data.elem.checked){
-			// 		/*æŸ¥æ‰¾childçš„å‰è¾¹ä¸€ä¸ªå…ƒç´ ï¼Œå¹¶å°†é‡Œè¾¹çš„checkboxé€‰ä¸­çŠ¶æ€æ”¹ä¸ºtrueã€‚*/
+			// 		/*²éÕÒchildµÄÇ°±ßÒ»¸öÔªËØ£¬²¢½«Àï±ßµÄcheckboxÑ¡ÖĞ×´Ì¬¸ÄÎªtrue¡£*/
 			// 		$(data.elem).parents('.auth-child').prev().find('input[type="checkbox"]').prop('checked', true);
 			// 	}
 			// 	/*console.log(childs);*/
@@ -68,35 +68,35 @@ layui.define(['jquery', 'form'], function(exports){
 				var elem = $(this).prev();
 				var checked = elem.is(':checked');
 
-				// å˜åŠ¨åˆ™å­˜ä¸€ä¸‹ä¸´æ—¶çŠ¶æ€
+				// ±ä¶¯Ôò´æÒ»ÏÂÁÙÊ±×´Ì¬
 				obj._saveNodeStatus(dst);
 
 				var childs = elem.parent().next().find('input[type="checkbox"]').prop('checked', checked);
 				if(checked){
-					/*æŸ¥æ‰¾childçš„å‰è¾¹ä¸€ä¸ªå…ƒç´ ï¼Œå¹¶å°†é‡Œè¾¹çš„checkboxé€‰ä¸­çŠ¶æ€æ”¹ä¸ºtrueã€‚*/
+					/*²éÕÒchildµÄÇ°±ßÒ»¸öÔªËØ£¬²¢½«Àï±ßµÄcheckboxÑ¡ÖĞ×´Ì¬¸ÄÎªtrue¡£*/
 					elem.parents('.auth-child').prev().find('input[type="checkbox"]').prop('checked', true);
 				}
 				/*console.log(childs);*/
 				form.render('checkbox');
 			});
 
-			/*åŠ¨æ€ç»‘å®šå±•å¼€äº‹ä»¶*/
+			/*¶¯Ì¬°ó¶¨Õ¹¿ªÊÂ¼ş*/
 			$(dst).unbind('click').on('click', '.auth-icon', function(){
 				var origin = $(this);
 				var child = origin.parent().parent().find('.auth-child:first');
 				if(origin.is('.active')){
-					/*æ”¶èµ·*/
+					/*ÊÕÆğ*/
 					origin.removeClass('active').html(obj.closeIconContent);
 					child.slideUp('fast');
 				} else {
-					/*å±•å¼€*/
+					/*Õ¹¿ª*/
 					origin.addClass('active').html(obj.openIconContent);
 					child.slideDown('fast');
 				}
 				return false;
 			})
 		},
-		// é€’å½’åˆ›å»ºæ ¼å¼
+		// µİ¹é´´½¨¸ñÊ½
 		renderAuth: function(tree, dept, opt){
 			var inputname = opt.inputname;
 			var layfilter = opt.layfilter;
@@ -105,13 +105,13 @@ layui.define(['jquery', 'form'], function(exports){
 
 			layui.each(tree, function(index, item){
 				var hasChild = item.list ? 1 : 0;
-				// æ³¨æ„ï¼šé€’å½’è°ƒç”¨æ—¶ï¼Œthisçš„ç¯å¢ƒä¼šæ”¹å˜ï¼
+				// ×¢Òâ£ºµİ¹éµ÷ÓÃÊ±£¬thisµÄ»·¾³»á¸Ä±ä£¡
 				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
 				str += '<div><div class="auth-status"> '+
 					(hasChild?'<i class="layui-icon auth-icon '+(openall?'active':'')+'" style="cursor:pointer;">'+(openall?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+
-					(dept > 0 ? '<span>â”œâ”€ </span>':'')+
+					(dept > 0 ? '<span>©À©¤ </span>':'')+
 					'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
 					(item.checked?'checked="checked"':'')+'> </div>'+
 					' <div class="auth-child" style="'+(openall?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
@@ -119,7 +119,7 @@ layui.define(['jquery', 'form'], function(exports){
 			str += '</div>';
 			return str;
 		},
-		// åŠ¨æ€è·å–æœ€å¤§æ·±åº¦
+		// ¶¯Ì¬»ñÈ¡×î´óÉî¶È
 		getMaxDept: function(dst){
 			var next = $(dst);
 			var dept = 1;
@@ -133,23 +133,23 @@ layui.define(['jquery', 'form'], function(exports){
 			}
 			return dept;
 		},
-		// å…¨é€‰
+		// È«Ñ¡
 		checkAll: function(dst){
 			var origin = $(dst);
-			// æ§åˆ¶å¥½ç¬¬ä¸€å±‚å³å¯
+			// ¿ØÖÆºÃµÚÒ»²ã¼´¿É
 			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
 				if ($(this).is(':checked')) {
-					// å¦‚æœä¸æ›´æ–°checkedçŠ¶æ€ï¼Œï¼Œå®¹æ˜“äº§ç”ŸçŠ¶æ€è¯»å–é”™è¯¯çš„å¡é¡¿BUG
+					// Èç¹û²»¸üĞÂchecked×´Ì¬£¬£¬ÈİÒ×²úÉú×´Ì¬¶ÁÈ¡´íÎóµÄ¿¨¶ÙBUG
 					$(this).prop('checked', true).next().click(function(){$(this).click()});
 				} else {
 					$(this).next().click();
 				}
 			});
 		},
-		// å…¨ä¸é€‰
+		// È«²»Ñ¡
 		uncheckAll: function(dst){
 			var origin = $(dst);
-			// æ§åˆ¶å¥½ç¬¬ä¸€å±‚å³å¯
+			// ¿ØÖÆºÃµÚÒ»²ã¼´¿É
 			origin.find('.auth-single:first>div>.auth-status input').each(function(index, item) {
 				if ($(this).is(':checked')) {
 					$(this).prop('checked', true).next().click();
@@ -158,15 +158,15 @@ layui.define(['jquery', 'form'], function(exports){
 				}
 			});
 		},
-		// æ˜¾ç¤ºæ•´ä¸ªæ ‘
+		// ÏÔÊ¾Õû¸öÊ÷
 		showAll: function(dst) {
 			this.showDept(dst, this.getMaxDept(dst));
 		},
-		// å…³é—­æ•´é¢—æ ‘
+		// ¹Ø±ÕÕû¿ÅÊ÷
 		closeAll: function(dst) {
 			this.closeDept(dst, 1);
 		},
-		// åˆ‡æ¢æ•´é¢—æ ‘çš„æ˜¾ç¤º/å…³é—­
+		// ÇĞ»»Õû¿ÅÊ÷µÄÏÔÊ¾/¹Ø±Õ
 		toggleAll: function(dst) {
 			if (this._shownDept(2)) {
 				this.closeDept(dst);
@@ -174,7 +174,7 @@ layui.define(['jquery', 'form'], function(exports){
 				this.showAll(dst);
 			}
 		},
-		// æ˜¾ç¤ºåˆ°ç¬¬ dept å±‚
+		// ÏÔÊ¾µ½µÚ dept ²ã
 		showDept: function(dst, dept) {
 			var next = $(dst);
 			for(var i = 1; i < dept; i++) {
@@ -186,7 +186,7 @@ layui.define(['jquery', 'form'], function(exports){
 				}
 			}
 		},
-		// ç¬¬ dept å±‚ä¹‹åå…¨éƒ¨å…³é—­
+		// µÚ dept ²ãÖ®ºóÈ«²¿¹Ø±Õ
 		closeDept: function(dst, dept) {
 			var next = $(dst);
 			for(var i = 0; i < dept; i++){
@@ -197,12 +197,12 @@ layui.define(['jquery', 'form'], function(exports){
 				next = this._getNext(next);
 			}
 		},
-		// ä¸´æ—¶ä¿å­˜æ‰€æœ‰èŠ‚ç‚¹ä¿¡æ¯çŠ¶æ€
+		// ÁÙÊ±±£´æËùÓĞ½ÚµãĞÅÏ¢×´Ì¬
 		_saveNodeStatus: function(dst){
-			this.checkedNode = this.getChecked(dst);
-			this.notCheckedNode = this.getNotChecked(dst);
+			this.checkedNode[dst] = this.getChecked(dst);
+			this.notCheckedNode[dst] = this.getNotChecked(dst);
 		},
-		// åˆ¤æ–­æŸä¸€å±‚æ˜¯å¦æ˜¾ç¤º
+		// ÅĞ¶ÏÄ³Ò»²ãÊÇ·ñÏÔÊ¾
 		_shownDept: function(dst, dept) {
 			var next = $(dst);
 			for(var i = 0; i < dept; i++){
@@ -210,33 +210,33 @@ layui.define(['jquery', 'form'], function(exports){
 			}
 			return !next.is(':hidden');
 		},
-		// è·å–
+		// »ñÈ¡
 		_getNext: function(dst) {
 			return $(dst).find('.auth-single:first>div>.auth-child');
 		},
-		// æ˜¾ç¤ºæŸå±‚ single
+		// ÏÔÊ¾Ä³²ã single
 		_showSingle: function(dst) {
 			var origin = $(dst).find('.auth-single:first');
 			var parentChild = origin.parent();
 			var parentStatus = parentChild.prev();
 			if (!parentStatus.find('.auth-icon').hasClass('active')) {
 				parentChild.show();
-				// æ˜¾ç¤ºä¸Šçº§çš„ .auth-childèŠ‚ç‚¹ï¼Œå¹¶ä¿®æ”¹.auth-statusçš„æŠ˜å çŠ¶æ€
+				// ÏÔÊ¾ÉÏ¼¶µÄ .auth-child½Úµã£¬²¢ĞŞ¸Ä.auth-statusµÄÕÛµş×´Ì¬
 				parentStatus.find('.auth-icon').addClass('active').html(obj.openIconContent);
 			}
 		},
-		// å…³é—­æŸå±‚ single
+		// ¹Ø±ÕÄ³²ã single
 		_closeSingle: function(dst) {
 			var origin = $(dst).find('.auth-single:first');
 			var parentChild = origin.parent();
 			var parentStatus = parentChild.prev();
 			if (parentStatus.find('.auth-icon').hasClass('active')) {
 				parentChild.hide();
-				// æ˜¾ç¤ºä¸Šçº§çš„ .auth-childèŠ‚ç‚¹ï¼Œå¹¶ä¿®æ”¹.auth-statusçš„æŠ˜å çŠ¶æ€
+				// ÏÔÊ¾ÉÏ¼¶µÄ .auth-child½Úµã£¬²¢ĞŞ¸Ä.auth-statusµÄÕÛµş×´Ì¬
 				parentStatus.find('.auth-icon').removeClass('active').html(obj.closeIconContent);
 			}
 		},
-		// è·å–é€‰ä¸­å¶å­ç»“ç‚¹
+		// »ñÈ¡Ñ¡ÖĞÒ¶×Ó½áµã
 		getLeaf: function(dst){
 			var leafs = $(dst).find('.auth-leaf').parent().find('input[type="checkbox"]:checked');
 			var data = [];
@@ -247,7 +247,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// console.log(data);
 			return data;
 		},
-		// è·å–æ‰€æœ‰èŠ‚ç‚¹æ•°æ®
+		// »ñÈ¡ËùÓĞ½ÚµãÊı¾İ
 		getAll: function(dst){
 			var inputs = $(dst).find('input[type="checkbox"]');
 			var data = [];
@@ -257,41 +257,40 @@ layui.define(['jquery', 'form'], function(exports){
 			// console.log(data);
 			return data;
 		},
-		// æœ€æ–°é€‰ä¸­ï¼ˆä¹‹å‰å–æ¶ˆ-ç°åœ¨é€‰ä¸­ï¼‰
+		// ×îĞÂÑ¡ÖĞ£¨Ö®Ç°È¡Ïû-ÏÖÔÚÑ¡ÖĞ£©
 		getLastChecked: function(dst) {
-			var lastCheckedNode = this.getChecked();
+			var lastCheckedNode = this.getChecked(dst);
 
 			var data = [];
 			for (i in lastCheckedNode) {
-				if ($.inArray(lastCheckedNode[i], this.notCheckedNode)) {
+				if ($.inArray(lastCheckedNode[i], this.notCheckedNode[dst]) != -1) {
 					data.push(lastCheckedNode[i]);
 				}
 			}
 			return data;
 		},
-		// è·å–æ‰€æœ‰é€‰ä¸­çš„æ•°æ®
+		// »ñÈ¡ËùÓĞÑ¡ÖĞµÄÊı¾İ
 		getChecked: function(dst){
 			var inputs = $(dst).find('input[type="checkbox"]:checked');
 			var data = [];
 			inputs.each(function(index, item){
 				data.push(item.value);
 			});
-			// console.log(data);
 			return data;
 		},
-		// æœ€æ–°å–æ¶ˆï¼ˆä¹‹å‰é€‰ä¸­-ç°åœ¨å–æ¶ˆï¼‰
+		// ×îĞÂÈ¡Ïû£¨Ö®Ç°Ñ¡ÖĞ-ÏÖÔÚÈ¡Ïû£©
 		getLastNotChecked: function(dst) {
-			var lastNotCheckedNode = this.getNotChecked();
+			var lastNotCheckedNode = this.getNotChecked(dst);
 
 			var data = [];
 			for (i in lastNotCheckedNode) {
-				if ($.inArray(lastNotCheckedNode[i], this.checkedNode)) {
+				if ($.inArray(lastNotCheckedNode[i], this.checkedNode[dst]) != -1) {
 					data.push(lastNotCheckedNode[i]);
 				}
 			}
 			return data;
 		},
-		// è·å–æœªé€‰ä¸­æ•°æ®
+		// »ñÈ¡Î´Ñ¡ÖĞÊı¾İ
 		getNotChecked: function(dst){
 			var inputs = $(dst).find('input[type="checkbox"]:not(:checked)');
 			var data = [];

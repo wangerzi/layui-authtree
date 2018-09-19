@@ -8,7 +8,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ## 功能演示：
 
-![功能演示](http://cdn.layui.com/upload/2018_3/11634672_1521798883089_97713.gif)
+![功能演示](http://thyrsi.com/t6/372/1537337199x-1404750136.gif)
 
 ## 函数列表
 
@@ -42,6 +42,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 6. 支持自定义lay-filter用于监听权限树选中(v0.2新增)
 7. 支持获取选中叶子结点信息(v0.2新增)
 8. 自适应标签名字长度配置(v0.5新增)
+9. 支持各种方式花样获取数据（v1.0 新增，具体参考函数表）
 
 ## 使用方法：
 
@@ -56,11 +57,12 @@ layui.config({
 }).extend({
 	authtree: 'authtree',
 });
-// 一般是异步调用
-layui.use(['jquery', 'authtree', 'form'], function(){
+layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 	var $ = layui.jquery;
 	var authtree = layui.authtree;
 	var form = layui.form;
+	var layer = layui.layer;
+	// 初始化
 	$.ajax({
 		url: 'tree.json',
 		dataType: 'json',
@@ -75,24 +77,44 @@ layui.use(['jquery', 'authtree', 'form'], function(){
 
 			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
 			form.on('checkbox(lay-check-auth)', function(data){
-                // 获取所有节点
-				var all = authtree.getAll('#LAY-auth-tree-index');
-				console.log('all', all);
-				// 获取所有已选中节点
-				var checked = authtree.getChecked('#LAY-auth-tree-index');
-				console.log('checked', checked);
-				// 获取所有未选中节点
-				var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
-				console.log('notchecked', notchecked);
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
+					// 获取所有节点
+					var all = authtree.getAll('#LAY-auth-tree-index');
+					console.log('all', all);
+					// 获取所有已选中节点
+					var checked = authtree.getChecked('#LAY-auth-tree-index');
+					console.log('checked', checked);
+					// 获取所有未选中节点
+					var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+					console.log('notchecked', notchecked);
 					// 获取选中的叶子节点
 					var leaf = authtree.getLeaf('#LAY-auth-tree-index');
-					console.log(leaf);
+					console.log('leaf', leaf);
+					// 获取最新选中
+					var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+					console.log('lastChecked', lastChecked);
+					// 获取最新取消
+					var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+					console.log('lastNotChecked', lastNotChecked);
 				}, 100);
 			});
 		}
-	})
+	});
+	form.on('submit(LAY-auth-tree-submit)', function(obj){
+		var authids = authtree.getAll('#LAY-auth-tree-index');
+		console.log('Choosed authids is', authids);
+		obj.field.authids = authids;
+		$.ajax({
+			url: 'tree.json',
+			dataType: 'json',
+			data: obj.field,
+			success: function(res){
+				layer.alert('提交成功！');
+			}
+		});
+		return false;
+	});
 });
 ```
 

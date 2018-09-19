@@ -10,7 +10,7 @@
 <div class="layui-container">
 	<div class="layui-row">
 		<div class="layui-col-md11 layui-col-md-offset1">
-			<fieldset class="layui-elem-field layui-field-title"><legend>权限操作演示</legend></fieldset>
+			<fieldset class="layui-elem-field layui-field-title"><legend>权限树操作演示</legend></fieldset>
 			<div class="layui-form">
 				<div class="layui-form-item">
 					<div class="layui-form-label">权限操作</div>
@@ -202,9 +202,10 @@ function getNodeStatus(dst){
 			,area: '800px'
 			,tipsMore: true
 		});
-		$('body').on('click', '.LAY-auth-tree-show-detail', function(){
+		$('body').unbind('click').on('click', '.LAY-auth-tree-show-detail', function(){
 			layer.open({
-				title: '节点详情',
+				type: 1,
+				title: $(this).data('title')+'-节点详情',
 				content: '['+$(this).data('content')+']',
 				tipsMore: true
 			});
@@ -214,6 +215,12 @@ function getNodeStatus(dst){
 </script>
 <!-- 状态模板 -->
 <script type="text/html" id="LAY-auth-tree-nodes">
+<style type="text/css">
+	.layui-layer-page .layui-layer-content{
+		padding: 20px;
+		line-height: 22px;
+	}
+</style>
 	<table class="layui-table">
 		<thead>
 			<th>方法名</th>
@@ -225,7 +232,7 @@ function getNodeStatus(dst){
 			<tr>
 				<td>{{item.func}}</td>
 				<td>{{item.desc}}</td>
-				<td><a class="LAY-auth-tree-show-detail" href="javascript:;" data-content="{{item.data.join(']<br>[')}}">查看详情</a>({{item.data.length}})</td>
+				<td><a class="LAY-auth-tree-show-detail" href="javascript:;" data-title="{{item.desc}}" data-content="{{item.data.join(']<br>[')}}">查看详情</a>({{item.data.length}})</td>
 			</tr>
 			{{# });}}
 		</tbody>
