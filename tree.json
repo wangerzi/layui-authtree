@@ -12,46 +12,7 @@
         {"name": "管理员管理", "value": "sbgl-sbsjlb-2", "checked": true, "list":[
           {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-2", "checked": true},
           {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-2", "checked": false},
-          {"name": "管理员管理", "value": "sbgl-sbsjlb-3", "checked": true, "list":[
-            {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-3", "checked": true},
-            {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-3", "checked": false},
-            {"name": "管理员管理999999999999999999999999999999", "value": "sbgl-sbsjlb-4", "checked": true, "list":[
-              {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-4", "checked": true},
-              {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-4", "checked": false},
-              {"name": "管理员管理", "value": "sbgl-sbsjlb-5", "checked": true, "list":[
-                {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-5", "checked": true},
-                {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-5", "checked": false},
-                {"name": "管理员管理", "value": "sbgl-sbsjlb-6", "checked": true, "list":[
-                  {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-6", "checked": true},
-                  {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-6", "checked": false},
-                  {"name": "管理员管理", "value": "sbgl-sbsjlb-7", "checked": true, "list":[
-                    {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-7", "checked": true},
-                    {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-7", "checked": false},
-                    {"name": "管理员管理", "value": "sbgl-sbsjlb-8", "checked": true, "list":[
-                      {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-8", "checked": true},
-                      {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-8", "checked": false},
-                      {"name": "管理员管理", "value": "sbgl-sbsjlb-9", "checked": true, "list":[
-                        {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-9", "checked": true},
-                        {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-9", "checked": false},
-                        {"name": "管理员管理", "value": "sbgl-sbsjlb-10", "checked": true, "list":[
-                          {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-10", "checked": true},
-                          {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-10", "checked": false},
-                          {"name": "管理员管理", "value": "sbgl-sbsjlb-11", "checked": true, "list":[
-                            {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-11", "checked": true},
-                            {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-11", "checked": false},
-                            {"name": "管理员管理", "value": "sbgl-sbsjlb-12", "checked": true, "list":[
-                              {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-12", "checked": true},
-                              {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-12", "checked": false}
-                            ]}
-                          ]}
-                        ]}
-                      ]}
-                    ]}
-                  ]}
-                ]}
-              ]}
-            ]}
-          ]}
+          {"name": "管理员管理", "value": "sbgl-sbsjlb-3", "checked": true}
         ]}
       ]}
     ]

@@ -8,7 +8,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ## 功能演示：
 
-![功能演示](http://thyrsi.com/t6/372/1537337199x-1404750136.gif)
+![功能演示](http://thyrsi.com/t6/375/1537686725x-1566680256.gif)
 
 ## 函数列表
 
@@ -30,7 +30,28 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 | getLastNotChecked(dst)  | 最新取消（之前选中-现在未选）（需延迟获取）         |
 | getNotChecked(dst)      | 获取未选中数据（需延迟获取）                        |
 
+## 参数配置
 
+调用 `render(dst, trees, opt)` 函数时，opt 中可以传递的参数
+
+| 参数名    | 描述                                                         |
+| --------- | ------------------------------------------------------------ |
+| inputname | 上传上去的 input 表单的name                                  |
+| layfilter | input 元素的 layfilter，可通过 authtree.on('change(layfilter)') 监听 |
+| openall   | 是否初始化显示全部                                           |
+
+## 监听事件
+
+| 事件名称   | 描述                                   | 样例                                 |
+| ---------- | -------------------------------------- | ------------------------------------ |
+| change     | 监听节点树节点选中状态改变(包括全选等) | authtree.on('change(layfilter)')     |
+| showAll    | 显示整个树                             | authtree.on('showAll(layfilter)')    |
+| closeAll   | 监听关闭整颗树                         | authtree.on('closeAll(layfilter)')   |
+| checkAll   | 监听全选(目前仅限手动操作的全选)       | authtree.on('checkAll(layfilter)')   |
+| uncheckAll | 监听全不选(目前仅限手动操作的全不选)   | authtree.on('uncheckAll(layfilter)') |
+| toogleAll  | 切换整颗树的显示/关闭                  | authtree.on('toogleAll(layfilter)')  |
+| showDept   | 显示到某层的事件                       | authtree.on('showDept(layfilter)')   |
+| closeDept  | 关闭某层后的事件                       | authtree.on('closeDept(layfilter)')  |
 
 ## 功能概览：
 
@@ -166,7 +187,9 @@ layui/				官网下载的layui
 
 ## 更新记录：
 
-2018-09-19 v1.0 完善权限树的方法，新增方法请见函数列表和演示样例
+2018-09-29 v1.0 正式版，方法效率优化以及新增监听事件，消除各种BUG
+
+2018-09-19 v1.0 预览版，完善权限树的方法，新增方法请见函数列表和演示样例
 
 2018-09-06 v0.5 新增authwidth参数用于适应节点名称宽度，默认true
 
