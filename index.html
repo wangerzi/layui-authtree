@@ -121,6 +121,9 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 				var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
 				console.log('lastNotChecked', lastNotChecked);
 			});
+			authtree.on('deptChange(lay-check-auth)', function(data) {
+				console.log('监听到显示层数改变',data);
+			});
 		}
 	});
 	form.on('submit(LAY-auth-tree-submit)', function(obj){

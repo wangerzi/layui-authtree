@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-09-23 15:04:55
+* @Last Modified time: 2018-09-23 15:54:38
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -75,7 +75,7 @@ layui.define(['jquery', 'form'], function(exports){
 				// 变动则存一下临时状态
 				obj._saveNodeStatus(dst);
 				// 触发 change 事件
-				obj._triggerEvent(dst, 'change');
+				obj._triggerEvent(dst, 'change', {othis: $(this)});
 				obj.autoWidth(dst);
 			});
 
@@ -92,6 +92,7 @@ layui.define(['jquery', 'form'], function(exports){
 					origin.addClass('active').html(obj.openIconContent);
 					child.slideDown('fast');
 				}
+				obj._triggerEvent(dst, 'deptChange');	
 				return false;
 			})
 		},
@@ -137,16 +138,22 @@ layui.define(['jquery', 'form'], function(exports){
 			});
 		},
 		// 触发自定义事件
-		_triggerEvent: function(dst, events) {
+		_triggerEvent: function(dst, events, other) {
 			var tree = this.renderedTrees[dst];
 			var origin = $(dst);
 			if (tree) {
 				var opt = tree.opt;
-				layui.event.call(origin, MOD_NANE, events+'('+opt.layfilter+')', {
+				var data = {
 					opt: opt,
 					dst: dst,
 					othis: origin,
-				});
+				};
+				if (other && typeof other === 'object') {
+					data = $.extend(data, other);
+				}
+				// 支持 dst 和 用户的配置的 layfilter 监听
+				layui.event.call(origin, MOD_NANE, events+'('+dst+')', data);
+				layui.event.call(origin, MOD_NANE, events+'('+opt.layfilter+')', data);
 			} else {
 				return false;
 			}
@@ -174,7 +181,8 @@ layui.define(['jquery', 'form'], function(exports){
 			obj.autoWidth(dst);
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
-			obj._triggerEvent(dst, 'change');
+			obj._triggerEvent(dst, 'change');	
+			obj._triggerEvent(dst, 'checkAll');	
 		},
 		// 全不选
 		uncheckAll: function(dst){
@@ -185,6 +193,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
 			obj._triggerEvent(dst, 'change');
+			obj._triggerEvent(dst, 'uncheckAll');	
 		},
 		// 显示整个树
 		showAll: function(dst) {
@@ -201,7 +210,6 @@ layui.define(['jquery', 'form'], function(exports){
 			} else {
 				this.showAll(dst);
 			}
-			obj._triggerEvent(dst, 'change');
 		},
 		// 显示到第 dept 层
 		showDept: function(dst, dept) {
@@ -214,6 +222,7 @@ layui.define(['jquery', 'form'], function(exports){
 					break;
 				}
 			}
+			obj._triggerEvent(dst, 'deptChange', {dept: dept});
 		},
 		// 第 dept 层之后全部关闭
 		closeDept: function(dst, dept) {
@@ -225,6 +234,7 @@ layui.define(['jquery', 'form'], function(exports){
 				this._closeSingle(next);
 				next = this._getNext(next);
 			}
+			obj._triggerEvent(dst, 'deptChange', {dept: dept});
 		},
 		// 临时保存所有节点信息状态
 		_saveNodeStatus: function(dst){
@@ -236,7 +246,7 @@ layui.define(['jquery', 'form'], function(exports){
 			this.checkedNode[dst] = currentChecked;
 			this.notCheckedNode[dst] = currentNotChecked;
 
-			console.log('保存节点信息', this.checkedNode[dst], this.notCheckedNode[dst], this.lastCheckedNode[dst], this.lastNotCheckedNode[dst]);
+			// console.log('保存节点信息', this.checkedNode[dst], this.notCheckedNode[dst], this.lastCheckedNode[dst], this.lastNotCheckedNode[dst]);
 		},
 		// 判断某一层是否显示
 		_shownDept: function(dst, dept) {
