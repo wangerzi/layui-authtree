@@ -94,19 +94,11 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 				autowidth: true,
 			});
 
-			// 监听自定义lay-filter选中状态，PS:layui现在不支持多次监听，所以扩展里边只能改变触发逻辑，然后引起了事件冒泡延迟的BUG，要是谁有好的建议可以反馈我
+			// PS:使用 form.on() 会引起了事件冒泡延迟的BUG，需要 setTimeout()，并且无法监听全选/全不选
 			form.on('checkbox(lay-check-auth)', function(data){
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
-					// 获取所有节点
-					var all = authtree.getAll('#LAY-auth-tree-index');
-					console.log('all', all);
-					// 获取所有已选中节点
-					var checked = authtree.getChecked('#LAY-auth-tree-index');
-					console.log('checked', checked);
-					// 获取所有未选中节点
-					var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
-					console.log('notchecked', notchecked);
+					console.log('监听 form 触发事件数据', data);
 					// 获取选中的叶子节点
 					var leaf = authtree.getLeaf('#LAY-auth-tree-index');
 					console.log('leaf', leaf);
@@ -117,6 +109,31 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 					var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
 					console.log('lastNotChecked', lastNotChecked);
 				}, 100);
+			});
+			// 使用 authtree.on() 不会有冒泡延迟
+			authtree.on('change(lay-check-auth)', function(data) {
+				console.log('监听 authtree 触发事件数据', data);
+				// 获取所有节点
+				var all = authtree.getAll('#LAY-auth-tree-index');
+				console.log('all', all);
+				// 获取所有已选中节点
+				var checked = authtree.getChecked('#LAY-auth-tree-index');
+				console.log('checked', checked);
+				// 获取所有未选中节点
+				var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+				console.log('notchecked', notchecked);
+				// 获取选中的叶子节点
+				var leaf = authtree.getLeaf('#LAY-auth-tree-index');
+				console.log('leaf', leaf);
+				// 获取最新选中
+				var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+				console.log('lastChecked', lastChecked);
+				// 获取最新取消
+				var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+				console.log('lastNotChecked', lastNotChecked);
+			});
+			authtree.on('deptChange(lay-check-auth)', function(data) {
+				console.log('监听到显示层数改变',data);
 			});
 		}
 	});
