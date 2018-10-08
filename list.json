@@ -1,0 +1,17 @@
+{
+  "code": 0,
+  "msg": "获取成功",
+  "data": {
+    "list": [
+      { "id": 1, "name": "用户管理", "alias": "yhgl", "palias": "0" },
+      { "id": 2, "name": "用户组管理", "alias": "yhzgl", "palias": "0" },
+      { "id": 3, "name": "角色管理", "alias": "yhzgl-jsgl", "palias": "yhzgl" },
+      { "id": 4, "name": "添加角色", "alias": "yhzgl-jsgl-tjjs", "palias": "yhzgl-jsgl" },
+      { "id": 5, "name": "角色列表", "alias": "yhzgl-jsgl-jslb", "palias": "yhzgl-jsgl" },
+      { "id": 6, "name": "管理员管理", "alias": "glygl", "palias": "0" },
+      { "id": 7, "name": "添加管理员", "alias": "glygl-tjgly", "palias": "glygl" },
+      { "id": 8, "name": "管理员列表", "alias": "glygl-glylb", "palias": "glygl" }
+    ],
+    "checkedAlias": [ "yhgl",  "yhzgl", "yhzgl-jsgl", "yhzgl-jsgl-tjjs" ]
+  }
+}

@@ -28,6 +28,7 @@
 					<div class="layui-form-block">
 						<button type="button" class="layui-btn layui-btn-primary" onclick="showDept('#LAY-auth-tree-index')">展开到某层</button>
 						<button type="button" class="layui-btn layui-btn-primary" onclick="closeDept('#LAY-auth-tree-index')">关闭某层后所有的层</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="listConvert('list.json')">列表转树</button>
 					</div>
 				</div>
 			</div>
@@ -77,13 +78,17 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 		success: function(data){
 			// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
 			authtree.render('#LAY-auth-tree-index', data.data.trees, {
-				inputname: 'authids[]', 
-				layfilter: 'lay-check-auth', 
-				// openall: true,
-				autowidth: true,
+				inputname: 'authids[]'
+				,layfilter: 'lay-check-auth'
+				// ,autoclose: false
+				// ,autochecked: false
+				// ,openchecked: true
+				// ,openall: true
+				,autowidth: true
 			});
 
 			// PS:使用 form.on() 会引起了事件冒泡延迟的BUG，需要 setTimeout()，并且无法监听全选/全不选
+			// PS:如果开启双击展开配置，form.on()会记录两次点击事件，authtree.on()不会
 			form.on('checkbox(lay-check-auth)', function(data){
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
@@ -259,6 +264,51 @@ function closeDept(dst) {
 		layer.prompt({title: '关闭某层以后的所有层'}, function(value, index, elem) {
 			authtree.closeDept(dst, value);
 			layer.close(index);
+		});
+	});
+}
+// 转换列表
+function listConvert(url) {
+	layui.use(['layer', 'authtree', 'jquery', 'form', 'code'], function(){
+		var jquery = layui.jquery;
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+		var form = layui.form;
+
+		layer.open({
+			title: '列表转树演示'
+			,content: '<fieldset class="layui-elem-field layui-field-title"><legend>列表数据转权限树</legend></fieldset><form class="layui-form"> <div class="layui-form-item"> <label class="layui-form-label">多选权限</label> <div class="layui-input-block"> <div id="LAY-auth-tree-convert-index"></div> </div> </div> <div class="layui-form-item"> <div class="layui-input-block"> <button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">提交</button> <button class="layui-btn layui-btn-primary" type="reset">重置</button> </div> </div></form><pre class="layui-code" id="LAY-auth-tree-convert-code"></pre>'
+			,area: ['800px', '400px']
+			,tipsMore: true
+			,success: function() {
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					success: function(res){
+						$('#LAY-auth-tree-convert-code').text(JSON.stringify(res, null, 2));
+						layui.code({
+							title: '返回的列表数据'
+						});
+						// 支持自定义递归字段、数组权限判断等
+						// 深坑注意：如果API返回的数据是字符串，那么 startPid 的数据类型也需要是字符串
+						var trees = authtree.listConvert(res.data.list, {
+							primaryKey: 'alias'
+							,startPid: '0'
+							,parentKey: 'palias'
+							,nameKey: 'name'
+							,valueKey: 'alias'
+							,checkedKey: res.data.checkedAlias
+						});
+						// 如果页面中多个树共存，需要注意 layfilter 需要不一样
+						authtree.render('#LAY-auth-tree-convert-index', trees, {
+							inputname: 'authids[]', 
+							layfilter: 'lay-check-convert-auth', 
+							// openall: true,
+							autowidth: true,
+						});
+					}
+				});
+			},
 		});
 	});
 }

@@ -3,16 +3,16 @@
   "msg": "获取成功",
   "data": {
     "trees":[
-    	{"name": "用户管理", "value": "xsgl", "checked": true},
-    	{"name": "用户组管理", "value": "sbgl", "checked": true, "list": [
-    		{"name": "角色管理", "value": "sbgl-sbsjlb-1", "checked": true, "list":[
-    			{"name": "添加角色", "value": "sbgl-sbsjlb-dj-1", "checked": true},
-    			{"name": "角色列表", "value": "sbgl-sbsjlb-yl-1", "checked": false}
+    	{"name": "用户管理", "value": "yhgl", "checked": true},
+    	{"name": "用户组管理", "value": "yhzgl", "checked": true, "list": [
+    		{"name": "角色管理", "value": "yhzgl-jsgl", "checked": true, "list":[
+    			{"name": "添加角色", "value": "yhzgl-jsgl-tjjs", "checked": true},
+    			{"name": "角色列表", "value": "yhzgl-jsgl-jslb", "checked": false}
     		]},
-        {"name": "管理员管理", "value": "sbgl-sbsjlb-2", "checked": true, "list":[
-          {"name": "添加管理员", "value": "sbgl-sbsjlb-dj-2", "checked": true},
-          {"name": "管理员列表", "value": "sbgl-sbsjlb-yl-2", "checked": false},
-          {"name": "管理员管理", "value": "sbgl-sbsjlb-3", "checked": true}
+        {"name": "管理员管理", "value": "glygl", "checked": false, "list":[
+          {"name": "添加管理员", "value": "glygl-tjgly", "checked": false},
+          {"name": "管理员列表", "value": "glygl-glylb", "checked": false},
+          {"name": "管理员管理", "value": "glygl-glylb", "checked": false}
         ]}
       ]}
     ]
