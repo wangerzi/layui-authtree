@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-09-23 15:54:38
+* @Last Modified time: 2018-10-09 16:37:06
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -235,7 +235,7 @@ layui.define(['jquery', 'form'], function(exports){
 		 * @param  {[type]} opt  [description]
 		 * @return {[type]}      [description]
 		 */
-		treeConvertSelect(tree, opt) {
+		treeConvertSelect: function(tree, opt) {
 			if (typeof tree.length !== 'number' || tree.length <= 0) {
 				return [];
 			}
