@@ -130,14 +130,26 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 
 render()函数是本插件的核心方法，调用 `render(dst, trees, opt)` 函数时，opt 中可以传递的参数如下
 
-| 参数名        | 描述                                                         | 默认      |
-| ------------- | ------------------------------------------------------------ | --------- |
-| **inputname** | 上传上去的 input 表单的name                                  | menuids[] |
-| openchecked   | 自动显示选中的节点                                           | false     |
-| layfilter     | input 元素的 layfilter，可通过 authtree.on('change(layfilter)') 监听 | checkauth |
-| openall       | 是否初始化显示全部                                           | false     |
-| autochecked   | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |
-| autoclose     | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为选中时)    | true      |
+| 参数名          | 描述                                                         | 默认      |
+| --------------- | ------------------------------------------------------------ | --------- |
+| **inputname**   | 上传上去的 input 表单的name                                  | menuids[] |
+| openchecked     | 自动显示选中的节点                                           | false     |
+| layfilter       | input 元素的 layfilter，可通过 authtree.on('change(layfilter)') 监听 | checkauth |
+| openall         | 是否初始化显示全部                                           | false     |
+| **dblshow**     | 双击展开节点                                                 | false     |
+| dbltimeout      | 双击展开节点延迟(最好不要超过300，不然单击延迟会比较高)      | 180       |
+| **autochecked** | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |
+| **autoclose**   | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为选中时)    | true      |
+
+> **自动选中父级节点和自动取消父级选中 具体描述：**
+>
+> 自动选中父级节点：开启后，选中某节点，会将其上层所有未选中父节点设为选中，并且将其下层所有节点设为选中；取消选中某节点，其所有子节点均取消。
+>
+> 自动取消父级节点：开启后，取消选中某一子节点，当其兄弟节点均处于未选中状态，自动取消父级节点
+>
+>
+>
+> 两种状态一般同时开启，或者同时关闭，不然可能体验有点奇怪
 
 ##### listConvert 参数配置
 
@@ -399,7 +411,7 @@ layui/				官网下载的layui
 
 ##### layui社区:
 
-感谢 [Xiao情子](https://fly.layui.com/u/13405224/)、[挽手说梦话](https://fly.layui.com/u/15279936/)、[呆呆17](https://fly.layui.com/u/21441168/)、[空痕影](https://fly.layui.com/u/24549336/)、[mmmmargin](https://fly.layui.com/u/16231488/)、[Son](https://fly.layui.com/u/10266648/)、[夏诺](https://fly.layui.com/u/7003752/)、[尧仙子](https://fly.layui.com/u/7185864/)、[徐俊](https://fly.layui.com/u/6566280/) 等童鞋提供的建议
+感谢 [Xiao情子](https://fly.layui.com/u/13405224/)、[挽手说梦话](https://fly.layui.com/u/15279936/)、[呆呆17](https://fly.layui.com/u/21441168/)、[空痕影](https://fly.layui.com/u/24549336/)、[mmmmargin](https://fly.layui.com/u/16231488/)、[Son](https://fly.layui.com/u/10266648/)、[夏诺](https://fly.layui.com/u/7003752/)、[尧仙子](https://fly.layui.com/u/7185864/)、[徐俊](https://fly.layui.com/u/6566280/)、[IBean](https://fly.layui.com/u/4473336/) 等童鞋提供的建议
 
 ##### github:
 

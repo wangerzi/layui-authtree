@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-10-09 16:37:06
+* @Last Modified time: 2018-10-09 18:31:42
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -91,15 +91,16 @@ layui.define(['jquery', 'form'], function(exports){
 					var checked = elem.is(':checked');
 
 					if (autochecked) {
-						var childs = elem.parent().next().find('input[type="checkbox"]').prop('checked', checked);
-					}
-					if(checked){
-						if (autochecked) {
+						if (checked) {
 							/*查找child的前边一个元素，并将里边的checkbox选中状态改为true。*/
 							elem.parents('.auth-child').prev().find('input[type="checkbox"]').prop('checked', true);
 						}
-					} else {
-						if (autoclose) {
+						var childs = elem.parent().next().find('input[type="checkbox"]').prop('checked', checked);
+					}
+					if (autoclose) {
+						if (checked) {
+							// pass
+						} else {
 							// 自动关闭父级选中节点
 							obj._autoclose($(that).parent());
 						}
@@ -165,14 +166,15 @@ layui.define(['jquery', 'form'], function(exports){
 				var hasChild = item.list ? 1 : 0;
 				// 注意：递归调用时，this的环境会改变！
 				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
+				var openstatus = openall || (opt.openchecked && item.checked);
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
-				str += '<div><div class="auth-status"> '+
-					(hasChild?'<i class="layui-icon auth-icon '+(openall?'active':'')+'" style="cursor:pointer;">'+(openall?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+
+				str += '<div><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
+					(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;">&#xe626;</i>')+
 					(dept > 0 ? '<span>├─ </span>':'')+
 					'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
 					(item.checked?'checked="checked"':'')+'> </div>'+
-					' <div class="auth-child" style="'+( (openall || (opt.openchecked && item.checked) )?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
+					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
 			str += '</div>';
 			return str;
