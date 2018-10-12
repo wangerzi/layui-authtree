@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-10-09 18:31:42
+* @Last Modified time: 2018-10-12 10:38:52
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -133,6 +133,10 @@ layui.define(['jquery', 'form'], function(exports){
 		_autoclose: function(obj) {
 			var single = $(obj).parent().parent();
 			var authStatus = single.parent().prev();
+
+			if (!authStatus.hasClass('auth-status')) {
+				return false;
+			}
 			// 仅一层
 			if (single.find('div>.auth-status>input[type="checkbox"]:checked').length === 0) {
 				authStatus.find('input[type="checkbox"]').prop('checked', false);
@@ -306,7 +310,7 @@ layui.define(['jquery', 'form'], function(exports){
 		// 动态获取最大深度
 		getMaxDept: function(dst){
 			var next = $(dst);
-			var dept = 1;
+			var dept = 0;
 			while(next.length && dept < 100000) {
 				next = this._getNext(next);
 				if (next.length) {
@@ -407,14 +411,16 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 显示某层 single
 		_showSingle: function(dst) {
-			var origin = $(dst).find('.auth-single:first');
-			var parentChild = origin.parent();
-			var parentStatus = parentChild.prev();
-			if (!parentStatus.find('.auth-icon').hasClass('active')) {
-				parentChild.show();
-				// 显示上级的 .auth-child节点，并修改.auth-status的折叠状态
-				parentStatus.find('.auth-icon').addClass('active').html(obj.openIconContent);
-			}
+			layui.each(dst, function(index, item) {
+				var origin = $(item).find('.auth-single:first');
+				var parentChild = origin.parent();
+				var parentStatus = parentChild.prev();
+				if (!parentStatus.find('.auth-icon').hasClass('active')) {
+					parentChild.show();
+					// 显示上级的 .auth-child节点，并修改.auth-status的折叠状态
+					parentStatus.find('.auth-icon').addClass('active').html(obj.openIconContent);
+				}
+			});
 		},
 		// 关闭某层 single
 		_closeSingle: function(dst) {
