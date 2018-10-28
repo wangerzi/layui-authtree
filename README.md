@@ -10,7 +10,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ## 功能演示：
 
-![功能演示](http://thyrsi.com/t6/375/1537686725x-1566680256.gif)
+![功能演示](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/screenGIF.gif)
 
 ## 期望收集
 
