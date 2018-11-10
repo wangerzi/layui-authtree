@@ -31,6 +31,14 @@
 						<button type="button" class="layui-btn layui-btn-primary" onclick="listConvert('list.json')">列表转树</button>
 					</div>
 				</div>
+				<div class="layui-form-item">
+					<div class="layui-form-label">更新及文档</div>
+					<div class="layui-form-block">
+						<a class="layui-btn layui-btn-primary" target="_blank" href="https://fly.layui.com/jie/24206/">社区原帖</a>
+						<a class="layui-btn layui-btn-primary" target="_blank" href="https://github.com/wangerzi/layui-authtree">最新源码+文档</a>
+						<a class="layui-btn layui-btn-primary" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=zfT5_fv19fn1-428vOOuoqA">快速反馈</a>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="layui-col-md6 layui-col-md-offset1">
@@ -129,10 +137,13 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 			authtree.on('deptChange(lay-check-auth)', function(data) {
 				console.log('监听到显示层数改变',data);
 			});
+		},
+		error: function(xml, errstr, err) {
+			layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
 		}
 	});
 	form.on('submit(LAY-auth-tree-submit)', function(obj){
-		var authids = authtree.getAll('#LAY-auth-tree-index');
+		var authids = authtree.getChecked('#LAY-auth-tree-index');
 		console.log('Choosed authids is', authids);
 		obj.field.authids = authids;
 		$.ajax({
@@ -306,9 +317,12 @@ function listConvert(url) {
 							// openall: true,
 							autowidth: true,
 						});
+					},
+					error: function(xml, errstr, err) {
+						layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
 					}
 				});
-			},
+			}
 		});
 	});
 }
