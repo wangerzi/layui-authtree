@@ -12,8 +12,14 @@ layui.define(['jquery', 'form'], function(exports){
 
 	obj = {
 		// 渲染 + 绑定事件
-		openIconContent: '&#xe625;',
-		closeIconContent: '&#xe623;',
+		openIconContent: '',
+		closeIconContent: '',
+		// 表单类型 checkbox: 多选，radio：单选
+		checkType: 'checkbox',
+		// 选中、半选中、未选中
+		checkedIconContent: '',
+		halfCheckedIconContent: '',
+		notCheckedIconContent: '',
 		// 保存节点数据
 		checkedNode : {},
 		notCheckedNode : {},
@@ -35,7 +41,7 @@ layui.define(['jquery', 'form'], function(exports){
 		 * @param  {[type]} openall [是否展开全部]
 		 * @return {[type]}           [description]
 		 */
-		render: function(dst, trees, opt){
+		render: function(dst, trees, opt) {
 			var inputname = opt.inputname ? opt.inputname : 'menuids[]';
 			opt.inputname = inputname;
 			var layfilter = opt.layfilter ? opt.layfilter : 'checkauth';
@@ -52,6 +58,23 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.autoclose = autoclose;
 			var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
 			opt.autochecked = autochecked;
+			// 有子节点的前显字符配置
+			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
+			// 单选、多选配置
+			opt.checkType = opt.checkType ? opt.checkType : 'checkbox';
+			this.checkType = opt.checkType;
+			// 展开、折叠节点的前显字符配置
+			opt.openIconContent = opt.openIconContent ? opt.openIconContent : '&#xe625;';
+			this.openIconContent = opt.openIconContent;
+			opt.closeIconContent = opt.closeIconContent ? opt.closeIconContent : '&#xe623;';
+			this.closeIconContent = opt.closeIconContent;
+			// 选中、半选中、未选中节点的图标配置
+			opt.checkedIconContent = opt.checkedIconContent ? opt.checkedIconContent : '&#xe605;';
+			this.checkedIconContent = opt.checkedIconContent;
+			opt.halfCheckedIconContent = opt.halfCheckedIconContent ? opt.halfCheckedIconContent : '&#xe605;';
+			this.halfCheckedIconContent = opt.halfCheckedIconContent;
+			opt.notCheckedIconContent = opt.notCheckedIconContent ? opt.notCheckedIconContent : '&#xe605;';
+			this.notCheckedIconContent = opt.notCheckedIconContent;
 
 			// 不启用双击展开，单击不用延迟
 			if (!dblshow) {
@@ -61,7 +84,14 @@ layui.define(['jquery', 'form'], function(exports){
 			// 记录渲染过的树
 			obj.renderedTrees[dst] = {trees: trees, opt: opt};
 
-			$(dst).html(obj.renderAuth(trees, 0, {inputname: inputname, layfilter: layfilter, openall: openall, openchecked: openchecked}));
+			$(dst).html(obj.renderAuth(trees, 0, {
+				inputname: inputname,
+				layfilter: layfilter,
+				openall: openall,
+				openchecked: openchecked,
+				checkType: this.checkType,
+				prefixChildStr: opt.prefixChildStr,
+			}));
 			form.render();
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
@@ -175,8 +205,8 @@ layui.define(['jquery', 'form'], function(exports){
 				// '+new Array(dept * 4).join('&nbsp;')+'
 				str += '<div><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
 					(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
-					(dept > 0 ? '<span>├─ </span>':'')+
-					'<input type="checkbox" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
+					(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
+					'<input type="'+opt.checkType+'" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
 					(item.checked?'checked="checked"':'')+'> </div>'+
 					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
@@ -250,23 +280,54 @@ layui.define(['jquery', 'form'], function(exports){
 			// 子节点列表的Key
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
 			// 有子节点的前缀
-			opt.prefixHasChildStr = opt.prefixStr ? opt.prefixStr : '├─';
+			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─ ';
 			// 没有子节点的前缀
-			opt.prefixHasChildStr = opt.prefixStr ? opt.prefixStr : '|';
+			opt.prefixNoChildStr = opt.prefixNoChildStr ? opt.prefixNoChildStr : '● ';
 			// 树的深度影响的子节点数据
 			opt.prefixDeptStr = opt.prefixDeptStr ? opt.prefixDeptStr : '　';
+			// 如果第一列就存在没有子节点的情况，加的特殊前缀
+			opt.prefixFirstEmpty = opt.prefixFirstEmpty ? opt.prefixFirstEmpty : '　　'
 
-			return this._treeToSelect(list, opt.currentDept, opt);
+			return this._treeToSelect(tree, opt.currentDept, opt);
 		},
 		// 实际处理递归的函数
-		_treeToSelect: function(list, currentDept, opt) {
+		_treeToSelect: function(tree, currentDept, opt) {
 			var ansList = [];
+			var prefix = '';
 
-			for (index in list) {
-				var item = list[index];
-				item['name'] = 
-				ansList.push(item);
+			for  (var i = 0;i < currentDept; i++) {
+				prefix += opt.prefixDeptStr;
 			}
+
+			for (index in tree) {
+				var child_flag = 0;
+				var item = tree[index];
+				if (opt.childKey in item && item[opt.childKey] && item[opt.childKey].length > 0) {
+					child_flag = 1;
+				}
+				name = item.name;
+				if (child_flag) {
+					name = opt.prefixChildStr + name;
+				} else {
+					if (currentDept > 1) {
+						name = opt.prefixNoChildStr + name;
+					} else {
+						name = opt.prefixFirstEmpty + name;
+					}
+				}
+				ansList.push({
+					name: prefix+name,
+					value: item.value,
+					checked: item.checked,
+				});
+				// 添加子节点
+				if (child_flag) {
+					var child = this._treeToSelect(item[opt.childKey], currentDept + 1, opt);
+					// apply 的骚操作，使用第二个参数可以用于合并两个数组
+					ansList.push.apply(ansList, child);
+				}
+			}
+			return ansList;
 		},
 		// 自动调整宽度以解决 form.render()生成元素兼容性问题，如果用户手动调用 form.render() 之后也需要调用此方法
 		autoWidth: function(dst) {

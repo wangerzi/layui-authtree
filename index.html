@@ -29,6 +29,7 @@
 						<button type="button" class="layui-btn layui-btn-primary" onclick="showDept('#LAY-auth-tree-index')">展开到某层</button>
 						<button type="button" class="layui-btn layui-btn-primary" onclick="closeDept('#LAY-auth-tree-index')">关闭某层后所有的层</button>
 						<button type="button" class="layui-btn layui-btn-primary" onclick="listConvert('list.json')">列表转树</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="treeConvertSelect('tree.json')">树转单选树</button>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -247,7 +248,7 @@ function getNodeStatus(dst){
 				type: 1,
 				title: $(this).data('title')+'-节点详情',
 				content: '['+$(this).data('content')+']',
-				tipsMore: true
+				tipsMore: true 
 			});
 		});
 	});
@@ -278,10 +279,54 @@ function closeDept(dst) {
 		});
 	});
 }
+// 树转下拉树
+function treeConvertSelect(url) {
+	layui.use(['layer', 'authtree', 'jquery', 'form', 'code', 'laytpl'], function(){
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var authtree = layui.authtree;
+		var form = layui.form;
+		var laytpl = layui.laytpl;
+
+		layer.open({
+			title: '树转下拉树演示'
+			,content: '<div id="LAY-auth-tree-convert-select-dom"></div>'
+			,area: ['800px', '400px']
+			,tipsMore: true
+			,success: function() {
+				$.ajax({
+					url: url,
+					dataType: 'json',
+					success: function(res){
+						// 更多传入参数及其具体意义请查看文档
+						var selectList = authtree.treeConvertSelect(res.data.trees, {
+							childKey: 'list',
+						});
+						console.log(selectList);
+						// 渲染单选框
+						var string =  laytpl($('#LAY-auth-tree-convert-select').html()).render({
+							list: selectList,
+							code: JSON.stringify(res, null, 2),
+						});
+						$('#LAY-auth-tree-convert-select-dom').html(string);
+						layui.code({
+							title: '返回的树状数据'
+						});
+						form.render('select');
+						// TODO::form.on('select(LAY-FILTER)')监听选中
+					},
+					error: function(xml, errstr, err) {
+						layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
+					}
+				});
+			}
+		});
+	});
+}
 // 转换列表
 function listConvert(url) {
 	layui.use(['layer', 'authtree', 'jquery', 'form', 'code'], function(){
-		var jquery = layui.jquery;
+		var $ = layui.jquery;
 		var layer = layui.layer;
 		var authtree = layui.authtree;
 		var form = layui.form;
@@ -351,5 +396,25 @@ function listConvert(url) {
 			{{# });}}
 		</tbody>
 	</table>
+</script>
+<!-- 树转单选树的DOM -->
+<script type="text/html" id="LAY-auth-tree-convert-select">
+<fieldset class="layui-elem-field layui-field-title">
+	<legend>树转下拉树</legend>
+</fieldset>
+<form class="layui-form">
+	<div class="layui-form-item">
+		<label class="layui-form-label">转换结果</label>
+		<div class="layui-input-block">
+			<select name="authid" class="layui-input">
+				{{# layui.each(d.list, function(index, item) { }}
+				<option vlaue="{{item.value}}">{{item.name}}</option>
+				{{# });}}
+			</select>
+		</div>
+	</div>
+	<blockquote class="layui-elem-quote">注：如果返回的是列表数据而非树状数据，可以先进行『列表转树』操作。<br>往后如果对这方面的效率有需求，请联系我添加一个 『列表转下拉树』的功能！</blockquote>
+	<pre class="layui-code">{{d.code}}</pre>
+</form>
 </script>
 </html>
