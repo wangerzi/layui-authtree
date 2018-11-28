@@ -153,7 +153,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 | **dblshow**      | 双击展开节点                                                 | false     |
 | dbltimeout       | 双击展开节点延迟(最好不要超过300，不然单击延迟会比较高)      | 180       |
 | **autochecked**  | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |
-| **autoclose**    | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为选中时)    | true      |
+| **autoclose**    | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为未选中时)    | true      |
 | checkType        | 选择表单类型，checkbox: 多选，radio: 单选                    | checkbox  |
 | openIconContent  | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | &\#xe625; |
 | closeIconContent | 折叠的前显字符配置（默认是方向向右的三角形，就像这样▶）      | &\#xe623; |
