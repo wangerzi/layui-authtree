@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   94468
-* @Last Modified time: 2018-12-02 14:04:41
+* @Last Modified time: 2018-12-02 15:23:24
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -50,7 +50,7 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.openall = openall;
 			var dblshow = opt.dblshow ? opt.dblshow : false;
 			opt.dblshow = dblshow;
-			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 180;
+			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 120;
 			opt.dbltimeout = dbltimeout;
 			var openchecked = typeof opt.openchecked !== 'undefined' ? opt.openchecked : true;
 			opt.openchecked = openchecked;
@@ -80,8 +80,16 @@ layui.define(['jquery', 'form'], function(exports){
 			this.notCheckedIconContent = opt.notCheckedIconContent;
 
 			// 不启用双击展开，单击不用延迟
-			if (!dblshow) {
-				dbltimeout = 0;
+			var dblisten = true;
+			if (dblshow) {
+				// 开启双击展开，双击事件默认为120s
+			} else {
+				// 未开启双击展开且 dbltimeout <= 0，则说明不用监听双击事件
+				if (opt.dbltimeout <= 0) {
+					dblisten = false;
+				}
+				var dbltimeout = 0;
+				// opt.dbltimeout = dbltimeout;
 			}
 
 			// 记录渲染过的树
@@ -115,9 +123,11 @@ layui.define(['jquery', 'form'], function(exports){
 			
 			// 解决单击和双击冲突问题的 timer 变量
 			var timer = 0;
+			var dblclicktimer = 0;
 			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(){
 				var that = this;
 				clearTimeout(timer);
+				clearTimeout(dblclicktimer);
 				// 双击判断需要的延迟处理
 				timer = setTimeout(function(){
 					var elem = $(that).prev();
@@ -160,6 +170,13 @@ layui.define(['jquery', 'form'], function(exports){
 				}).on('selectstart', function(){
 					// 屏蔽双击选中文字
 					return false;
+				});
+			}
+			// 触发时间 > 0，才触发双击事件
+			// opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
+			if (opt.dbltimeout > 0) {
+				$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
+					obj._triggerEvent(dst, 'dblclick', {othis: $(this)});
 				});
 			}
 		},

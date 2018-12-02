@@ -89,6 +89,8 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 			authtree.render('#LAY-auth-tree-index', data.data.trees, {
 				inputname: 'authids[]'
 				,layfilter: 'lay-check-auth'
+				// ,dblshow: true
+				,dbltimeout: 120
 				// ,autoclose: false
 				// ,autochecked: false
 				// ,openchecked: true
@@ -100,7 +102,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 
 			// PS:使用 form.on() 会引起了事件冒泡延迟的BUG，需要 setTimeout()，并且无法监听全选/全不选
 			// PS:如果开启双击展开配置，form.on()会记录两次点击事件，authtree.on()不会
-			form.on('checkbox(lay-check-auth)', function(data){
+/*			form.on('checkbox(lay-check-auth)', function(data){
 				// 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
 				setTimeout(function(){
 					console.log('监听 form 触发事件数据', data);
@@ -115,30 +117,35 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 					console.log('lastNotChecked', lastNotChecked);
 				}, 100);
 			});
-			// 使用 authtree.on() 不会有冒泡延迟
+*/			// 使用 authtree.on() 不会有冒泡延迟
 			authtree.on('change(lay-check-auth)', function(data) {
 				console.log('监听 authtree 触发事件数据', data);
 				// 获取所有节点
 				var all = authtree.getAll('#LAY-auth-tree-index');
-				console.log('all', all);
 				// 获取所有已选中节点
 				var checked = authtree.getChecked('#LAY-auth-tree-index');
-				console.log('checked', checked);
 				// 获取所有未选中节点
 				var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
-				console.log('notchecked', notchecked);
 				// 获取选中的叶子节点
 				var leaf = authtree.getLeaf('#LAY-auth-tree-index');
-				console.log('leaf', leaf);
 				// 获取最新选中
 				var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
-				console.log('lastChecked', lastChecked);
 				// 获取最新取消
 				var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
-				console.log('lastNotChecked', lastNotChecked);
+				console.log(
+					'all', all,"\n",
+					'checked', checked,"\n",
+					'notchecked', notchecked,"\n",
+					'leaf', leaf,"\n",
+					'lastChecked', lastChecked,"\n",
+					'lastNotChecked', lastNotChecked,"\n",
+				);
 			});
 			authtree.on('deptChange(lay-check-auth)', function(data) {
 				console.log('监听到显示层数改变',data);
+			});
+			authtree.on('dblclick(lay-check-auth)', function(data) {
+				console.log('监听到双击事件',data);
 			});
 		},
 		error: function(xml, errstr, err) {

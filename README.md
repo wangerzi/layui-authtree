@@ -29,12 +29,15 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [x] 支持对勾选的进行展开，而不是整个树
 - [ ] 新增toolbar，用于扩展权限控制的操作
 - [ ] 部分选择权限的时候，他的父级前面不打对号，换个其他符号
-- [x] 可以配置单选/多选
+- [x] 可以配置单选/多选，并可选 lay-skin 属性
+- [x] 新增事件 dbclick 用于监听双击
+- [ ] 监听事件，新增 opt 参数，用于回调时便利的获取渲染参数，新增 tree 参数，用于把渲染数据传递过去
 
 ## BUG收集
-- [ ] 插件BUG - 数据量达到150+会比较卡
+- [x] 插件BUG - 数据量达到150+会比较卡
 - [x] 插件BUG - 没有选中父节点时不能取消全选
 - [x] 样例BUG - 异步获取数据失败时权限树渲染为空，并且没有友好的提示用户
+- [x] 单选权限树-监听事件失效
 
 ## 快速上手
 
@@ -153,6 +156,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 | **autochecked**  | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |
 | **autoclose**    | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为选中时)    | true      |
 | checkType        | 选择表单类型，checkbox: 多选，radio: 单选                    | checkbox  |
+| checkSkin        | 表单渲染的 lay-skin 参数，详见官方文档                       | primary   |
 | openIconContent  | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | &\#xe625; |
 | closeIconContent | 折叠的前显字符配置（默认是方向向右的三角形，就像这样▶）      | &\#xe623; |
 | prefixChildStr   | 有子节点的前显字符配置                                       | ├─        |
@@ -309,6 +313,7 @@ var trees = authtree.listConvert(res.data.list, {
 | checkAll   | 监听全选(目前仅限手动操作的全选)                   | authtree.on('checkAll(layfilter)')   |
 | uncheckAll | 监听全不选(目前仅限手动操作的全不选)               | authtree.on('uncheckAll(layfilter)') |
 | deptChange | 监听层数改变（包括点击、展开、关闭、全部展开关闭） | authtree.on('deptChange(layfilter)') |
+| dblclick   | 监听双击事件                                       | authtree.on('dblclick(layfilter)')   |
 
 ## 功能概览：
 
