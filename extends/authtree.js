@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   94468
-* @Last Modified time: 2018-11-10 15:28:58
+* @Last Modified time: 2018-12-02 14:04:41
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -63,6 +63,9 @@ layui.define(['jquery', 'form'], function(exports){
 			// 单选、多选配置
 			opt.checkType = opt.checkType ? opt.checkType : 'checkbox';
 			this.checkType = opt.checkType;
+			// 皮肤可选择
+			opt.checkSkin = opt.checkSkin ? opt.checkSkin : 'primary';
+			this.checkSkin = opt.checkSkin;
 			// 展开、折叠节点的前显字符配置
 			opt.openIconContent = opt.openIconContent ? opt.openIconContent : '&#xe625;';
 			this.openIconContent = opt.openIconContent;
@@ -112,7 +115,7 @@ layui.define(['jquery', 'form'], function(exports){
 			
 			// 解决单击和双击冲突问题的 timer 变量
 			var timer = 0;
-			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox', function(){
+			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(){
 				var that = this;
 				clearTimeout(timer);
 				// 双击判断需要的延迟处理
@@ -123,9 +126,9 @@ layui.define(['jquery', 'form'], function(exports){
 					if (autochecked) {
 						if (checked) {
 							/*查找child的前边一个元素，并将里边的checkbox选中状态改为true。*/
-							elem.parents('.auth-child').prev().find('input[type="checkbox"]').prop('checked', true);
+							elem.parents('.auth-child').prev().find('.authtree-checkitem[type="checkbox"]').prop('checked', true);
 						}
-						var childs = elem.parent().next().find('input[type="checkbox"]').prop('checked', checked);
+						var childs = elem.parent().next().find('.authtree-checkitem[type="checkbox"]').prop('checked', checked);
 					}
 					if (autoclose) {
 						if (checked) {
@@ -137,6 +140,7 @@ layui.define(['jquery', 'form'], function(exports){
 					}
 					/*console.log(childs);*/
 					form.render('checkbox');
+					form.render('radio');
 					// 变动则存一下临时状态
 					obj._saveNodeStatus(dst);
 					// 触发 change 事件
@@ -150,7 +154,7 @@ layui.define(['jquery', 'form'], function(exports){
 			});
 			/*双击展开*/
 			if (dblshow) {
-				$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox', function(e){
+				$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
 					clearTimeout(timer);
 					obj.iconToggle(dst, $(this).prevAll('.auth-icon:first'));
 				}).on('selectstart', function(){
@@ -168,8 +172,8 @@ layui.define(['jquery', 'form'], function(exports){
 				return false;
 			}
 			// 仅一层
-			if (single.find('div>.auth-status>input[type="checkbox"]:checked').length === 0) {
-				authStatus.find('input[type="checkbox"]').prop('checked', false);
+			if (single.find('div>.auth-status>input.authtree-checkitem[type="checkbox"]:checked').length === 0) {
+				authStatus.find('.authtree-checkitem[type="checkbox"]').prop('checked', false);
 				this._autoclose(authStatus);
 			}
 		},
@@ -206,7 +210,7 @@ layui.define(['jquery', 'form'], function(exports){
 				str += '<div><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
 					(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
 					(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
-					'<input type="'+opt.checkType+'" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
+					'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
 					(item.checked?'checked="checked"':'')+'> </div>'+
 					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
@@ -335,7 +339,7 @@ layui.define(['jquery', 'form'], function(exports){
 				'whiteSpace': 'nowrap',
 				'maxWidth' : '100%',
 			});
-			$(dst).find('.layui-form-checkbox').each(function(index, item){
+			$(dst).find('.layui-form-checkbox,.layui-form-audio').each(function(index, item){
 				if ($(this).is(':hidden')) {
 					// 比较奇葩的获取隐藏元素宽度的手法，请见谅
 					$('body').append('<div id="layui-authtree-get-width">'+$(this).html()+'</div>');
@@ -386,8 +390,9 @@ layui.define(['jquery', 'form'], function(exports){
 		checkAll: function(dst){
 			var origin = $(dst);
 
-			origin.find('input[type="checkbox"]:not(:checked)').prop('checked', true);
+			origin.find('.authtree-checkitem:not(:checked)').prop('checked', true);
 			form.render('checkbox');
+			form.render('radio');
 			obj.autoWidth(dst);
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
@@ -397,8 +402,9 @@ layui.define(['jquery', 'form'], function(exports){
 		// 全不选
 		uncheckAll: function(dst){
 			var origin = $(dst);
-			origin.find('input[type="checkbox"]:checked').prop('checked', false);
+			origin.find('.authtree-checkitem:checked').prop('checked', false);
 			form.render('checkbox');
+			form.render('radio');
 			obj.autoWidth(dst);
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
@@ -496,7 +502,7 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 获取选中叶子结点
 		getLeaf: function(dst){
-			var leafs = $(dst).find('.auth-leaf').parent().find('input[type="checkbox"]:checked');
+			var leafs = $(dst).find('.auth-leaf').parent().find('.authtree-checkitem:checked');
 			var data = [];
 			leafs.each(function(index, item){
 				// console.log(item);
@@ -507,7 +513,7 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 获取所有节点数据
 		getAll: function(dst){
-			var inputs = $(dst).find('input[type="checkbox"]');
+			var inputs = $(dst).find('.authtree-checkitem');
 			var data = [];
 			inputs.each(function(index, item){
 				data.push(item.value);
@@ -533,7 +539,7 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 获取所有选中的数据
 		getChecked: function(dst){
-			var inputs = $(dst).find('input[type="checkbox"]:checked');
+			var inputs = $(dst).find('.authtree-checkitem:checked');
 			var data = [];
 			inputs.each(function(index, item){
 				data.push(item.value);
@@ -558,7 +564,7 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 获取未选中数据
 		getNotChecked: function(dst){
-			var inputs = $(dst).find('input[type="checkbox"]:not(:checked)');
+			var inputs = $(dst).find('.authtree-checkitem:not(:checked)');
 			var data = [];
 			inputs.each(function(index, item){
 				data.push(item.value);
