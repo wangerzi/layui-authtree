@@ -18,7 +18,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ##### 沟通交流群：
 
-**QQ群号：**789188686
+**QQ群号：** 789188686
 
 ![QQ交流群](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/qq_group_qrcode.png)
 
