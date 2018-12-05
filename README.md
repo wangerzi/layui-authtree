@@ -153,7 +153,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 
 `render()` 函数是本插件的核心方法，调用 `render(dst, trees, opt)` 函数时
 
-tree 对象中基础属性含义如下：
+trees 对象中基础属性含义如下：
 
 | 参数名   | 描述              | 默认  |
 | -------- | ----------------- | ----- |
