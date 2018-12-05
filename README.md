@@ -16,6 +16,12 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 [http://authtree.wj2015.com/](http://authtree.wj2015.com/)
 
+##### 沟通交流群：
+
+**QQ群号：**789188686
+
+![QQ交流群](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/qq_group_qrcode.png)
+
 ## 期望收集
 
 - [x] 全选-全不选功能
@@ -29,15 +35,11 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [x] 支持对勾选的进行展开，而不是整个树
 - [ ] 新增toolbar，用于扩展权限控制的操作
 - [ ] 部分选择权限的时候，他的父级前面不打对号，换个其他符号
-<<<<<<< HEAD
 - [x] 可以配置单选/多选，并可选 lay-skin 属性
 - [x] 新增事件 dbclick 用于监听双击
 - [ ] 监听事件，新增 opt 参数，用于回调时便利的获取渲染参数，新增 tree 参数，用于把渲染数据传递过去
-=======
-- [x] 可以配置单选/多选
 - [ ] 渲染的时候可以禁止被选中
 - [ ] 可以支持 `reload` 方法用于重新渲染
->>>>>>> 7d99eef22f46419ceea177f1b356a90424e569a7
 
 ## BUG收集
 - [x] 插件BUG - 数据量达到150+会比较卡
@@ -145,7 +147,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 | getLastNotChecked(dst)       | 最新取消（之前选中-现在未选）（form.on()需延迟获取）         |
 | getNotChecked(dst)           | 获取未选中数据（form.on()需延迟获取）                        |
 
-## 参数配置
+## 重要函数参数配置
 
 ##### render 参数配置
 
