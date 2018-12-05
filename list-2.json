@@ -12,6 +12,7 @@
       { "id": 7, "name": "添加管理员", "pid": 6 },
       { "id": 8, "name": "管理员列表", "pid": 6 }
     ],
-    "checkedId": [ 1,  2, 3, 4 ]
+    "checkedId": [ 1,  2, 3, 4 ],
+    "disabledId": [ 7, 8 ]
   }
 }

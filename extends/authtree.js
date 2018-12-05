@@ -1,8 +1,8 @@
 /*
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
-* @Last Modified by:   94468
-* @Last Modified time: 2018-12-02 15:23:24
+* @Last Modified by:   Jeffrey Wang
+* @Last Modified time: 2018-12-05 20:57:27
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -136,9 +136,9 @@ layui.define(['jquery', 'form'], function(exports){
 					if (autochecked) {
 						if (checked) {
 							/*查找child的前边一个元素，并将里边的checkbox选中状态改为true。*/
-							elem.parents('.auth-child').prev().find('.authtree-checkitem[type="checkbox"]').prop('checked', true);
+							elem.parents('.auth-child').prev().find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', true);
 						}
-						var childs = elem.parent().next().find('.authtree-checkitem[type="checkbox"]').prop('checked', checked);
+						var childs = elem.parent().next().find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', checked);
 					}
 					if (autoclose) {
 						if (checked) {
@@ -189,8 +189,8 @@ layui.define(['jquery', 'form'], function(exports){
 				return false;
 			}
 			// 仅一层
-			if (single.find('div>.auth-status>input.authtree-checkitem[type="checkbox"]:checked').length === 0) {
-				authStatus.find('.authtree-checkitem[type="checkbox"]').prop('checked', false);
+			if (single.find('div>.auth-status>input.authtree-checkitem:not(:disabled)[type="checkbox"]:checked').length === 0) {
+				authStatus.find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', false);
 				this._autoclose(authStatus);
 			}
 		},
@@ -207,7 +207,7 @@ layui.define(['jquery', 'form'], function(exports){
 				origin.addClass('active').html(obj.openIconContent);
 				child.slideDown('fast');
 			}
-			obj._triggerEvent(dst, 'deptChange');	
+			obj._triggerEvent(dst, 'deptChange');
 			return false;
 		},
 		// 递归创建格式
@@ -228,7 +228,9 @@ layui.define(['jquery', 'form'], function(exports){
 					(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
 					(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
 					'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
-					(item.checked?'checked="checked"':'')+'> </div>'+
+					(item.checked?' checked="checked"':'')+
+					(item.disabled?' disabled':'')+
+					'> </div>'+
 					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
 			str += '</div>';
@@ -237,7 +239,7 @@ layui.define(['jquery', 'form'], function(exports){
 		/**
 		 * 将普通列表无限递归转换为树
 		 * @param  {[type]} list       [普通的列表，必须包括 opt.primaryKey 指定的键和 opt.parentKey 指定的键]
-		 * @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
+		 * @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey、disabledKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
 		 * @return {[type]}            [description]
 		 */
 		listConvert: function(list, opt) {
@@ -247,6 +249,8 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.currentDept = opt.currentDept ? opt.currentDept : 0;
 			opt.maxDept = opt.maxDept ? opt.maxDept : 100;
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
+			opt.checkedKey = opt.checkedKey ? opt.checkedKey : 'checked';
+			opt.disabledKey = opt.disabledKey ? opt.disabledKey : 'disabled';
 			opt.nameKey = opt.nameKey ? opt.nameKey : 'name';
 			opt.valueKey = opt.valueKey ? opt.valueKey : 'id';
 			return this._listToTree(list, opt.startPid, opt.currentDept, opt);
@@ -270,6 +274,7 @@ layui.define(['jquery', 'form'], function(exports){
 					}
 					node['name'] = item[opt.nameKey];
 					node['value'] = item[opt.valueKey];
+					// 已选中节点的两种渲染方式
 					if (typeof opt.checkedKey === "string" || typeof opt.checkedKey === 'number') {
 						node['checked'] = item[opt.checkedKey];
 					} else if(typeof opt.checkedKey === 'object') {
@@ -280,6 +285,18 @@ layui.define(['jquery', 'form'], function(exports){
 						}
 					} else {
 						node['checked'] = false;
+					}
+					// 禁用节点的两种渲染方式
+					if (typeof opt.disabledKey === "string" || typeof opt.disabledKey === 'number') {
+						node['disabled'] = item[opt.disabledKey];
+					} else if(typeof opt.disabledKey === 'object') {
+						if ($.inArray(item[opt.valueKey], opt.disabledKey) != -1) {
+							node['disabled'] = true;
+						} else {
+							node['disabled'] = false;
+						}
+					} else {
+						node['disabled'] = false;
 					}
 					child.push(node);
 				}
@@ -340,6 +357,7 @@ layui.define(['jquery', 'form'], function(exports){
 					name: prefix+name,
 					value: item.value,
 					checked: item.checked,
+					disabled: item.disabled,
 				});
 				// 添加子节点
 				if (child_flag) {
@@ -407,7 +425,7 @@ layui.define(['jquery', 'form'], function(exports){
 		checkAll: function(dst){
 			var origin = $(dst);
 
-			origin.find('.authtree-checkitem:not(:checked)').prop('checked', true);
+			origin.find('.authtree-checkitem:not(:disabled):not(:checked)').prop('checked', true);
 			form.render('checkbox');
 			form.render('radio');
 			obj.autoWidth(dst);
@@ -419,7 +437,7 @@ layui.define(['jquery', 'form'], function(exports){
 		// 全不选
 		uncheckAll: function(dst){
 			var origin = $(dst);
-			origin.find('.authtree-checkitem:checked').prop('checked', false);
+			origin.find('.authtree-checkitem:not(:disabled):checked').prop('checked', false);
 			form.render('checkbox');
 			form.render('radio');
 			obj.autoWidth(dst);

@@ -29,7 +29,7 @@
 						<button type="button" class="layui-btn layui-btn-primary" onclick="showDept('#LAY-auth-tree-index')">展开到某层</button>
 						<button type="button" class="layui-btn layui-btn-primary" onclick="closeDept('#LAY-auth-tree-index')">关闭某层后所有的层</button>
 						<button type="button" class="layui-btn layui-btn-primary" onclick="listConvert('list.json')">列表转树</button>
-						<button type="button" class="layui-btn layui-btn-primary" onclick="treeConvertSelect('tree.json')">树转单选树</button>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="treeConvertSelect('tree.json')">树转下拉树</button>
 					</div>
 				</div>
 				<div class="layui-form-item">
@@ -342,7 +342,7 @@ function listConvert(url) {
 
 		layer.open({
 			title: '列表转树演示'
-			,content: '<fieldset class="layui-elem-field layui-field-title"><legend>列表数据转权限树</legend></fieldset><form class="layui-form"> <div class="layui-form-item"> <label class="layui-form-label">多选权限</label> <div class="layui-input-block"> <div id="LAY-auth-tree-convert-index"></div> </div> </div> <div class="layui-form-item"> <div class="layui-input-block"> <button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">提交</button> <button class="layui-btn layui-btn-primary" type="reset">重置</button> </div> </div></form><pre class="layui-code" id="LAY-auth-tree-convert-code"></pre>'
+			,content: '<fieldset class="layui-elem-field layui-field-title"><legend>列表数据转权限树</legend></fieldset><form class="layui-form"> <div class="layui-form-item"> <label class="layui-form-label">多选权限</label> <div class="layui-input-block"> <div id="LAY-auth-tree-convert-index"></div> </div> </div> <div class="layui-form-item"> <div class="layui-input-block"> <button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">提交</button> <button class="layui-btn layui-btn-primary" type="reset">重置</button> </div> </div></form><pre class="layui-code" id="LAY-auth-tree-convert-code" lay-title="返回的列表数据"></pre><pre class="layui-code" id="LAY-auth-tree-convert-code-answer" lay-title="转换的树状数据"></pre>'
 			,area: ['800px', '400px']
 			,tipsMore: true
 			,success: function() {
@@ -350,10 +350,6 @@ function listConvert(url) {
 					url: url,
 					dataType: 'json',
 					success: function(res){
-						$('#LAY-auth-tree-convert-code').text(JSON.stringify(res, null, 2));
-						layui.code({
-							title: '返回的列表数据'
-						});
 						// 支持自定义递归字段、数组权限判断等
 						// 深坑注意：如果API返回的数据是字符串，那么 startPid 的数据类型也需要是字符串
 						var trees = authtree.listConvert(res.data.list, {
@@ -363,6 +359,11 @@ function listConvert(url) {
 							,nameKey: 'name'
 							,valueKey: 'alias'
 							,checkedKey: res.data.checkedAlias
+							,disabledKey: res.data.disabledAlias
+						});
+						$('#LAY-auth-tree-convert-code').text(JSON.stringify(res, null, 2));
+						$('#LAY-auth-tree-convert-code-answer').text(JSON.stringify(trees, null, 2));
+						layui.code({
 						});
 						// 如果页面中多个树共存，需要注意 layfilter 需要不一样
 						authtree.render('#LAY-auth-tree-convert-index', trees, {
@@ -417,7 +418,7 @@ function listConvert(url) {
 		<div class="layui-input-block">
 			<select name="authid" class="layui-input">
 				{{# layui.each(d.list, function(index, item) { }}
-				<option vlaue="{{item.value}}">{{item.name}}</option>
+				<option vlaue="{{item.value}}" {{item.checked?'selected':''}}{{item.disabled?'disabled':''}}>{{item.name}}</option>
 				{{# });}}
 			</select>
 		</div>

@@ -12,6 +12,7 @@
       { "id": 7, "name": "添加管理员", "alias": "glygl-tjgly", "palias": "glygl" },
       { "id": 8, "name": "管理员列表", "alias": "glygl-glylb", "palias": "glygl" }
     ],
-    "checkedAlias": [ "yhgl",  "yhzgl", "yhzgl-jsgl", "yhzgl-jsgl-tjjs" ]
+    "checkedAlias": [ "yhgl",  "yhzgl", "yhzgl-jsgl", "yhzgl-jsgl-tjjs" ],
+    "disabledAlias": [ "glygl-tjgly",  "glygl-glylb" ]
   }
 }
