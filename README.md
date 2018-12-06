@@ -38,6 +38,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [x] 可以配置单选/多选，并可选 lay-skin 属性
 - [x] 新增事件 dbclick 用于监听双击
 - [ ] 监听事件，新增 opt 参数，用于回调时便利的获取渲染参数，新增 tree 参数，用于把渲染数据传递过去
+- [x] 左侧单选/多选可以被隐藏
 - [x] 渲染/转换列表的时候可以禁止被选中
 - [ ] 可以支持 `reload` 方法用于重新渲染
 
@@ -171,6 +172,7 @@ opt 中可以传递的参数如下：
 | layfilter        | input 元素的 layfilter，可通过 authtree.on('change(layfilter)') 监听 | checkauth |
 | openall          | 是否初始化显示全部                                           | false     |
 | **dblshow**      | 双击展开节点                                                 | false     |
+| hidechoose       | 隐藏左侧 单选/多选框 - 特殊需求使用，建议checkType=radio     | false     |
 | dbltimeout       | 双击展开节点延迟(最好不要超过300，不然单击延迟会比较高)      | 180       |
 | openchecked      | 默认展开有选中数据的层                                       | true      |
 | **autochecked**  | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |

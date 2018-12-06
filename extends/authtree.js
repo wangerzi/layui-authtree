@@ -55,7 +55,7 @@ layui.define(['jquery', 'form'], function(exports){
 			var dblshow = opt.dblshow ? opt.dblshow : false;
 			opt.dblshow = dblshow;
 			// 双击时间差 - 不能设置过长，否则单击延迟很感人
-			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 180;
+			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 120;
 			opt.dbltimeout = dbltimeout;
 			// 默认展开有选中数据的层
 			var openchecked = typeof opt.openchecked !== 'undefined' ? opt.openchecked : true;
@@ -67,8 +67,8 @@ layui.define(['jquery', 'form'], function(exports){
 			var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
 			opt.autochecked = autochecked;
             // 是否隐藏左侧 单选/多选的选框 -- 特殊需求，一般用于单选树并且不用
-            var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
-            opt.autochecked = autochecked;
+            var hidechoose = typeof opt.hidechoose !== 'undefined' ? opt.hidechoose : false;
+            opt.hidechoose = hidechoose;
 			// 有子节点的前显字符配置
 			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
 			// 单选、多选配置
@@ -89,7 +89,7 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.notCheckedIconContent = opt.notCheckedIconContent ? opt.notCheckedIconContent : '&#xe605;';
 			this.notCheckedIconContent = opt.notCheckedIconContent;
 
-/*			// 不启用双击展开，单击不用延迟
+			// 不启用双击展开，单击不用延迟
 			var dblisten = true;
 			if (dblshow) {
 				// 开启双击展开，双击事件默认为120s
@@ -98,9 +98,9 @@ layui.define(['jquery', 'form'], function(exports){
 				if (opt.dbltimeout <= 0) {
 					dblisten = false;
 				}
-				var dbltimeout = 0;
+				dbltimeout = 0;
 				// opt.dbltimeout = dbltimeout;
-			}*/
+			}
 
 			// 记录渲染过的树
 			obj.renderedTrees[dst] = {trees: trees, opt: opt};
@@ -157,7 +157,6 @@ layui.define(['jquery', 'form'], function(exports){
 							obj._autoclose($(that).parent());
 						}
 					}
-					/*console.log(childs);*/
 					form.render('checkbox');
 					form.render('radio');
 					// 变动则存一下临时状态
@@ -378,11 +377,13 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 自动调整宽度以解决 form.render()生成元素兼容性问题，如果用户手动调用 form.render() 之后也需要调用此方法
 		autoWidth: function(dst) {
+            var tree = this.getRenderedInfo(dst);
+            var opt = tree.opt;
 			$(dst).css({
 				'whiteSpace': 'nowrap',
 				'maxWidth' : '100%',
 			});
-			$(dst).find('.layui-form-checkbox,.layui-form-audio').each(function(index, item){
+			$(dst).find('.layui-form-checkbox,.layui-form-radio,.layui-form-audio').each(function(index, item){
 				if ($(this).is(':hidden')) {
 					// 比较奇葩的获取隐藏元素宽度的手法，请见谅
 					$('body').append('<div id="layui-authtree-get-width">'+$(this).html()+'</div>');
@@ -392,11 +393,23 @@ layui.define(['jquery', 'form'], function(exports){
 					$width = $(this).find('span').width() + $(this).find('i').width() + 25;
 				}
 				$(this).width($width);
+                // 隐藏 单选/多选的左侧选框隐藏
+				if (opt.hidechoose) {
+				    $(this).prevAll('i').css({
+                        zIndex: 2,
+                    });
+				    $(this).css({
+                        position: 'relative'
+                        ,left: function () {
+                            return '-'+$(this).css('padding-left');// 避免点击抖动的骚操作
+                        }
+				    }).find('i').hide();
+                }
 			});
 		},
 		// 触发自定义事件
 		_triggerEvent: function(dst, events, other) {
-			var tree = this.renderedTrees[dst];
+			var tree = this.getRenderedInfo(dst);
 			var origin = $(dst);
 			if (tree) {
 				var opt = tree.opt;
@@ -415,6 +428,10 @@ layui.define(['jquery', 'form'], function(exports){
 				return false;
 			}
 		},
+        // 获取渲染过的信息
+        getRenderedInfo: function(dst) {
+		  return this.renderedTrees[dst];
+        },
 		// 动态获取最大深度
 		getMaxDept: function(dst){
 			var next = $(dst);
@@ -615,6 +632,6 @@ layui.define(['jquery', 'form'], function(exports){
 			// console.log(data);
 			return data;
 		}
-	}
+	};
 	exports('authtree', obj);
 });
