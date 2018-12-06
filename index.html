@@ -37,7 +37,8 @@
 					<div class="layui-form-block">
 						<a class="layui-btn layui-btn-primary" target="_blank" href="https://fly.layui.com/jie/24206/">社区原帖</a>
 						<a class="layui-btn layui-btn-primary" target="_blank" href="https://github.com/wangerzi/layui-authtree">最新源码+文档</a>
-						<a class="layui-btn layui-btn-primary" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=zfT5_fv19fn1-428vOOuoqA">快速反馈</a>
+						<a class="layui-btn layui-btn-primary" target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=zfT5_fv19fn1-428vOOuoqA">邮件反馈</a>
+						<button type="button" class="layui-btn layui-btn-primary" onclick="groupAdd()">加群交流</button>
 					</div>
 				</div>
 			</div>
@@ -89,8 +90,8 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 			authtree.render('#LAY-auth-tree-index', data.data.trees, {
 				inputname: 'authids[]'
 				,layfilter: 'lay-check-auth'
-				// ,dblshow: true
-				,dbltimeout: 120
+				,dblshow: true
+				,dbltimeout: 180
 				// ,autoclose: false
 				// ,autochecked: false
 				// ,openchecked: true
@@ -152,6 +153,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 			layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
 		}
 	});
+	// 表单提交样例
 	form.on('submit(LAY-auth-tree-submit)', function(obj){
 		var authids = authtree.getChecked('#LAY-auth-tree-index');
 		console.log('Choosed authids is', authids);
@@ -381,6 +383,24 @@ function listConvert(url) {
 		});
 	});
 }
+/**
+ * 加群交流弹窗
+ * @return {[type]} [description]
+ */
+function groupAdd() {
+	layui.use(['laytpl', 'layer', 'jquery'], function(){
+		var laytpl = layui.laytpl;
+		var layer = layui.layer;
+		var $ = layui.jquery;
+
+		var content = laytpl($('#LAY-auth-tree-group-add').html()).render({});
+		layer.open({
+			title: "加群交流"
+			,area: ['300px', '450px']
+			,content: content
+		});
+	});
+}
 </script>
 <!-- 状态模板 -->
 <script type="text/html" id="LAY-auth-tree-nodes">
@@ -418,7 +438,7 @@ function listConvert(url) {
 		<div class="layui-input-block">
 			<select name="authid" class="layui-input">
 				{{# layui.each(d.list, function(index, item) { }}
-				<option vlaue="{{item.value}}" {{item.checked?'selected':''}}{{item.disabled?'disabled':''}}>{{item.name}}</option>
+				<option vlaue="{{item.value}}" {{item.checked?'selected':''}} {{item.disabled?'disabled':''}}>{{item.name}}</option>
 				{{# });}}
 			</select>
 		</div>
@@ -426,5 +446,13 @@ function listConvert(url) {
 	<blockquote class="layui-elem-quote">注：如果返回的是列表数据而非树状数据，可以先进行『列表转树』操作。<br>往后如果对这方面的效率有需求，请联系我添加一个 『列表转下拉树』的功能！</blockquote>
 	<pre class="layui-code">{{d.code}}</pre>
 </form>
+</script>
+<!-- 加群交流layer模板 -->
+<script type="text/html" id="LAY-auth-tree-group-add">
+<!-- <fieldset class="layui-elem-field layui-field-title">
+	<legend>加群交流</legend>
+</fieldset>
+ --><p style="text-align: center;"><b>群号：</b>789188686，<a href="https://jq.qq.com/?_wv=1027&k=5Cd08sE" target="_blank">点我加群</a></p>
+<img src="https://raw.githubusercontent.com/wangerzi/layui-authtree/master/qq_group_qrcode.png" style="max-width: 100%;display:block;margin: 0 auto;">
 </script>
 </html>

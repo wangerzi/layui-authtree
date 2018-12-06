@@ -2,7 +2,7 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-12-05 20:57:27
+* @Last Modified time: 2018-12-06 16:06:04
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -42,22 +42,33 @@ layui.define(['jquery', 'form'], function(exports){
 		 * @return {[type]}           [description]
 		 */
 		render: function(dst, trees, opt) {
+			// 表单名称配置
 			var inputname = opt.inputname ? opt.inputname : 'menuids[]';
 			opt.inputname = inputname;
+			// lay-filter 配置
 			var layfilter = opt.layfilter ? opt.layfilter : 'checkauth';
 			opt.layfilter = layfilter;
+			// 默认展开全部 配置
 			var openall = opt.openall ? opt.openall : false;
 			opt.openall = openall;
+			// 双击展开此层配置
 			var dblshow = opt.dblshow ? opt.dblshow : false;
 			opt.dblshow = dblshow;
-			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 120;
+			// 双击时间差 - 不能设置过长，否则单击延迟很感人
+			var dbltimeout = opt.dbltimeout ? opt.dbltimeout : 180;
 			opt.dbltimeout = dbltimeout;
+			// 默认展开有选中数据的层
 			var openchecked = typeof opt.openchecked !== 'undefined' ? opt.openchecked : true;
 			opt.openchecked = openchecked;
+			// 自动取消选中
 			var autoclose = typeof opt.autoclose !== 'undefined' ? opt.autoclose : true;
 			opt.autoclose = autoclose;
+			// 自动选择直属父级节点
 			var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
 			opt.autochecked = autochecked;
+            // 是否隐藏左侧 单选/多选的选框 -- 特殊需求，一般用于单选树并且不用
+            var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
+            opt.autochecked = autochecked;
 			// 有子节点的前显字符配置
 			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
 			// 单选、多选配置
@@ -65,7 +76,6 @@ layui.define(['jquery', 'form'], function(exports){
 			this.checkType = opt.checkType;
 			// 皮肤可选择
 			opt.checkSkin = opt.checkSkin ? opt.checkSkin : 'primary';
-			this.checkSkin = opt.checkSkin;
 			// 展开、折叠节点的前显字符配置
 			opt.openIconContent = opt.openIconContent ? opt.openIconContent : '&#xe625;';
 			this.openIconContent = opt.openIconContent;
@@ -79,7 +89,7 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.notCheckedIconContent = opt.notCheckedIconContent ? opt.notCheckedIconContent : '&#xe605;';
 			this.notCheckedIconContent = opt.notCheckedIconContent;
 
-			// 不启用双击展开，单击不用延迟
+/*			// 不启用双击展开，单击不用延迟
 			var dblisten = true;
 			if (dblshow) {
 				// 开启双击展开，双击事件默认为120s
@@ -90,7 +100,7 @@ layui.define(['jquery', 'form'], function(exports){
 				}
 				var dbltimeout = 0;
 				// opt.dbltimeout = dbltimeout;
-			}
+			}*/
 
 			// 记录渲染过的树
 			obj.renderedTrees[dst] = {trees: trees, opt: opt};
@@ -123,11 +133,10 @@ layui.define(['jquery', 'form'], function(exports){
 			
 			// 解决单击和双击冲突问题的 timer 变量
 			var timer = 0;
-			var dblclicktimer = 0;
-			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(){
+			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(event){
+                window.event? window.event.cancelBubble = true : e.stopPropagation();
 				var that = this;
 				clearTimeout(timer);
-				clearTimeout(dblclicktimer);
 				// 双击判断需要的延迟处理
 				timer = setTimeout(function(){
 					var elem = $(that).prev();
@@ -138,7 +147,7 @@ layui.define(['jquery', 'form'], function(exports){
 							/*查找child的前边一个元素，并将里边的checkbox选中状态改为true。*/
 							elem.parents('.auth-child').prev().find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', true);
 						}
-						var childs = elem.parent().next().find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', checked);
+						elem.parent().next().find('.authtree-checkitem:not(:disabled)[type="checkbox"]').prop('checked', checked);
 					}
 					if (autoclose) {
 						if (checked) {
@@ -157,28 +166,27 @@ layui.define(['jquery', 'form'], function(exports){
 					obj._triggerEvent(dst, 'change', {othis: $(that)});
 					obj.autoWidth(dst);
 				}, dbltimeout);
+				return false;
 			});
 			/*动态绑定展开事件*/
 			$(dst).unbind('click').on('click', '.auth-icon', function(){
 				obj.iconToggle(dst, this);
 			});
 			/*双击展开*/
-			if (dblshow) {
-				$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
-					clearTimeout(timer);
-					obj.iconToggle(dst, $(this).prevAll('.auth-icon:first'));
-				}).on('selectstart', function(){
-					// 屏蔽双击选中文字
-					return false;
-				});
-			}
-			// 触发时间 > 0，才触发双击事件
-			// opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
-			if (opt.dbltimeout > 0) {
-				$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
-					obj._triggerEvent(dst, 'dblclick', {othis: $(this)});
-				});
-			}
+            $(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
+                // 触发时间 > 0，才触发双击事件
+                // opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
+                // if (opt.dbltimeout > 0) {
+                    obj._triggerEvent(dst, 'dblclick', {othis: $(this)});
+                // }
+                if (dblshow) {
+                    clearTimeout(timer);
+                    obj.iconToggle(dst, $(this).prevAll('.auth-icon:first'));
+                }
+            }).on('selectstart', function(){
+                // 屏蔽双击选中文字
+                return false;
+            });
 		},
 		// 自动关闭 - 如果兄弟节点均没选中，递归取消上级元素选中状态，传入的是 .auth-status 节点，递归 .auth-status 上级节点
 		_autoclose: function(obj) {
@@ -343,7 +351,7 @@ layui.define(['jquery', 'form'], function(exports){
 				if (opt.childKey in item && item[opt.childKey] && item[opt.childKey].length > 0) {
 					child_flag = 1;
 				}
-				name = item.name;
+				var name = item.name;
 				if (child_flag) {
 					name = opt.prefixChildStr + name;
 				} else {

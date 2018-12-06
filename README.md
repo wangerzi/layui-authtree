@@ -18,7 +18,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ##### 沟通交流群：
 
-**QQ群号：**789188686
+**QQ群号：** 789188686
 
 ![QQ交流群](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/qq_group_qrcode.png)
 
@@ -172,12 +172,13 @@ opt 中可以传递的参数如下：
 | openall          | 是否初始化显示全部                                           | false     |
 | **dblshow**      | 双击展开节点                                                 | false     |
 | dbltimeout       | 双击展开节点延迟(最好不要超过300，不然单击延迟会比较高)      | 180       |
+| openchecked      | 默认展开有选中数据的层                                       | true      |
 | **autochecked**  | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true      |
-| **autoclose**    | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为未选中时)    | true      |
+| **autoclose**    | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为未选中时)  | true      |
 | checkType        | 选择表单类型，checkbox: 多选，radio: 单选                    | checkbox  |
 | checkSkin        | 表单渲染的 lay-skin 参数，详见官方文档                       | primary   |
-| openIconContent  | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | &\#xe625; |
-| closeIconContent | 折叠的前显字符配置（默认是方向向右的三角形，就像这样▶）      | &\#xe623; |
+| openIconContent  | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | ▼         |
+| closeIconContent | 折叠的前显字符配置（默认是方向向右的三角形，就像这样▶）      | ▶         |
 | prefixChildStr   | 有子节点的前显字符配置                                       | ├─        |
 
 > **自动选中父级节点和自动取消父级选中 用法描述：**
@@ -488,6 +489,10 @@ tree.json			模拟权限树数据
 extends/authtree.js	权限树扩展
 
 layui/				官网下载的layui
+
+## 更新预告：
+
+v1.3 支持节点不可选择、节点皮肤(官方lay-skin)、新增半选中状态、选中/半选中/未选中图标配置、隐藏左单选/多选框
 
 ## 更新记录：
 
