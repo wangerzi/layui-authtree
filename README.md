@@ -10,11 +10,12 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 
 ## 功能演示：
 
-![功能演示](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/screenGIF.gif)
-
 ##### 在线演示：
 
 [http://authtree.wj2015.com/](http://authtree.wj2015.com/)
+
+![功能演示](https://raw.githubusercontent.com/wangerzi/layui-authtree/master/screenGIF.gif)
+
 
 ##### 沟通交流群：
 
