@@ -134,7 +134,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// 解决单击和双击冲突问题的 timer 变量
 			var timer = 0;
 			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(event){
-                window.event? window.event.cancelBubble = true : e.stopPropagation();
+                // window.event? window.event.cancelBubble = true : event.stopPropagation();
 				var that = this;
 				clearTimeout(timer);
 				// 双击判断需要的延迟处理
