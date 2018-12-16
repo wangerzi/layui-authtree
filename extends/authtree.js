@@ -1,8 +1,9 @@
 /*
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
-* @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2018-12-06 16:06:04
+* @Version: v1.2.2
+* @Last Modified by:   94468
+* @Last Modified time: 2018-12-16 19:30:17
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -225,7 +226,7 @@ layui.define(['jquery', 'form'], function(exports){
 			var str = '<div class="auth-single">';
 
 			layui.each(tree, function(index, item){
-				var hasChild = item.list ? 1 : 0;
+				var hasChild = (item.list&&(item.list.length || !$.isEmptyObject(item.list.length))) ? 1 : 0;
 				// 注意：递归调用时，this的环境会改变！
 				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
 				var openstatus = openall || (opt.openchecked && item.checked);
