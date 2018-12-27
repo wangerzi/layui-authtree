@@ -88,7 +88,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 		success: function(data){
 			// 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
 			authtree.render('#LAY-auth-tree-index', data.data.trees, {
-				inputname: 'authids[]'
+				inputname: 'ids[]'
 				,layfilter: 'lay-check-auth'
 				// ,dblshow: true
 				// ,dbltimeout: 180
@@ -158,7 +158,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 	form.on('submit(LAY-auth-tree-submit)', function(obj){
 		var authids = authtree.getChecked('#LAY-auth-tree-index');
 		console.log('Choosed authids is', authids);
-		obj.field.authids = authids;
+		// obj.field.authids = authids;
 		$.ajax({
 			url: 'tree.json',
 			dataType: 'json',
