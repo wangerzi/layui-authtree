@@ -208,13 +208,16 @@ opt 参数如下：
 
 `treeConverSelect` 是用于树转换为『单选树』的方法，其中 opt 参数如下
 
-| 参数名           | 描述                                                         | 默认值 |
-| ---------------- | ------------------------------------------------------------ | ------ |
-| childKey         | 子节点列表的Key                                              | list   |
-| prefixChildStr   | 有子节点的名称显示前缀                                       | ├─     |
-| prefixNoChildStr | 没有子节点的名称显示前缀                                     | ●      |
-| prefixDeptStr    | 树的深度影响的子节点显示前缀                                 |        |
-| prefixFirstEmpty | 如果第一列就存在没有子节点的情况，加的特殊前缀(占位用，正常使用不需要修改) |        |
+| 参数名           | 描述                                                         | 默认值   |
+| ---------------- | ------------------------------------------------------------ | -------- |
+| childKey         | 子节点列表的Key                                              | list     |
+| valueKey         | 值的key                                                      | value    |
+| checkedKey       | 选中的key - 仅支持字符串                                     | checked  |
+| disabledKey      | 禁用的key                                                    | disabled |
+| prefixChildStr   | 有子节点的名称显示前缀                                       | ├─       |
+| prefixNoChildStr | 没有子节点的名称显示前缀                                     | ●        |
+| prefixDeptStr    | 树的深度影响的子节点显示前缀                                 |          |
+| prefixFirstEmpty | 如果第一列就存在没有子节点的情况，加的特殊前缀(占位用，正常使用不需要修改) |          |
 
 **调用样例**
 
@@ -262,18 +265,19 @@ $.ajax({
 </script>
 ```
 
-##### listConvert 参数配置
+#### listConvert 参数配置
 
 `listConvert` 是用于转换列表和树结构的方法，参数比较灵活，调用 `listConvert(list, opt)` 时，opt可传入参数如下
 
-| 参数名         | 描述                                       | 默认值   |
-| -------------- | ------------------------------------------ | -------- |
-| **primaryKey** | 主键                                       | id       |
-| **parentKey**  | 父级id对应键                               | pid      |
-| nameKey        | 节点标题对应的key                          | name     |
-| valueKey       | 节点值对应的key                            | id       |
-| **checkedKey** | 节点是否选中的字段（支持 String 和 Array） | checked  |
-| disabledKey    | 节点是否不可选的字段（支持String和Array）  | disabled |
+| 参数名         | 描述                                               | 默认值   |
+| -------------- | -------------------------------------------------- | -------- |
+| **primaryKey** | 主键                                               | id       |
+| **parentKey**  | 父级id对应键                                       | pid      |
+| startPid       | 作为父节点的pid，会先查找此pid对应的节点作为父节点 | 0        |
+| nameKey        | 节点标题对应的key                                  | name     |
+| valueKey       | 节点值对应的key                                    | id       |
+| **checkedKey** | 节点是否选中的字段（支持 String 和 Array）         | checked  |
+| disabledKey    | 节点是否不可选的字段（支持String和Array）          | disabled |
 
 > **关于 checkedKey 参数的设计：**
 >
@@ -505,7 +509,7 @@ layui/				官网下载的layui
 
 ## 更新预告：
 
-v1.3 支持节点不可选择、节点皮肤(官方lay-skin)、新增半选中状态、选中/半选中/未选中图标配置、隐藏左单选/多选框
+v1.3 支持节点不可选择、节点皮肤(官方lay-skin)、新增半选中状态、选中/半选中/未选中图标配置、隐藏左单选/多选框、树转列表树支持配置 value/checked/disabled的键名
 
 ## 更新记录：
 

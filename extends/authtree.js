@@ -3,7 +3,7 @@
 * @Date:   2018-03-16 18:24:47
 * @Version: v1.2.2
 * @Last Modified by:   94468
-* @Last Modified time: 2018-12-16 19:30:17
+* @Last Modified time: 2019-01-02 12:43:11
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -325,6 +325,12 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.currentDept = opt.currentDept ? opt.currentDept : 0;
 			// 子节点列表的Key
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
+			// 值的key
+			opt.valueKey = opt.valueKey ? opt.valueKey : 'value';
+			// 选中的key - 仅支持字符串
+			opt.checkedKey = opt.checkedKey ? opt.checkedKey : 'checked';
+			// 禁用的key
+			opt.disabledKey = opt.disabledKey ? opt.disabledKey : 'disabled';
 			// 有子节点的前缀
 			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─ ';
 			// 没有子节点的前缀
@@ -363,9 +369,9 @@ layui.define(['jquery', 'form'], function(exports){
 				}
 				ansList.push({
 					name: prefix+name,
-					value: item.value,
-					checked: item.checked,
-					disabled: item.disabled,
+					value: item[opt.valueKey],
+					checked: item[opt.checkedKey],
+					disabled: item.[opt.disabledKey],
 				});
 				// 添加子节点
 				if (child_flag) {
