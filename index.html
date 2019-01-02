@@ -317,6 +317,7 @@ function treeConvertSelect(url) {
 						console.log(selectList);
 						// 渲染单选框
 						var string =  laytpl($('#LAY-auth-tree-convert-select').html()).render({
+							// 为了 layFilter 的唯一性，使用模板渲染的方式传递
 							layFilter: 'LAY-auth-tree-convert-select-input',
 							list: selectList,
 							code: JSON.stringify(res, null, 2),
@@ -326,10 +327,10 @@ function treeConvertSelect(url) {
 							title: '返回的树状数据'
 						});
 						form.render('select');
+						// 使用form.on('select(LAY-FILTER)')监听选中
 						form.on('select(LAY-auth-tree-convert-select-input)', function(data){
-							console.log(data);
+							console.log('选中信息', data);
 						});
-						// TODO::form.on('select(LAY-FILTER)')监听选中
 					},
 					error: function(xml, errstr, err) {
 						layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
@@ -443,7 +444,7 @@ function groupAdd() {
 		<div class="layui-input-block">
 			<select name="authid" class="layui-input" lay-filter="{{d.layFilter}}">
 				{{# layui.each(d.list, function(index, item) { }}
-				<option vlaue="{{item.value}}" {{item.checked?'selected':''}} {{item.disabled?'disabled':''}}>{{item.name}}</option>
+				<option value="{{item.value}}" {{item.checked?'selected':''}} {{item.disabled?'disabled':''}}>{{item.name}}</option>
 				{{# });}}
 			</select>
 		</div>
