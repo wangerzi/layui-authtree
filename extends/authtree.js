@@ -3,7 +3,7 @@
 * @Date:   2018-03-16 18:24:47
 * @Version: v1.2.2
 * @Last Modified by:   94468
-* @Last Modified time: 2019-01-02 12:43:11
+* @Last Modified time: 2019-01-02 22:58:34
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -371,7 +371,7 @@ layui.define(['jquery', 'form'], function(exports){
 					name: prefix+name,
 					value: item[opt.valueKey],
 					checked: item[opt.checkedKey],
-					disabled: item.[opt.disabledKey],
+					disabled: item[opt.disabledKey],
 				});
 				// 添加子节点
 				if (child_flag) {
