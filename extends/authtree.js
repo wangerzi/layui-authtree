@@ -2,8 +2,8 @@
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
 * @Version: v1.2.2
-* @Last Modified by:   94468
-* @Last Modified time: 2019-01-02 22:58:34
+* @Last Modified by:   Jeffrey Wang
+* @Last Modified time: 2019-01-07 16:01:17
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -163,7 +163,11 @@ layui.define(['jquery', 'form'], function(exports){
 					// 变动则存一下临时状态
 					obj._saveNodeStatus(dst);
 					// 触发 change 事件
-					obj._triggerEvent(dst, 'change', {othis: $(that)});
+					obj._triggerEvent(dst, 'change', {
+						othis: $(that),
+						oinput: elem,
+						value: elem.val(),
+					});
 					obj.autoWidth(dst);
 				}, dbltimeout);
 				return false;
@@ -177,7 +181,11 @@ layui.define(['jquery', 'form'], function(exports){
                 // 触发时间 > 0，才触发双击事件
                 // opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
                 // if (opt.dbltimeout > 0) {
-                    obj._triggerEvent(dst, 'dblclick', {othis: $(this)});
+                    obj._triggerEvent(dst, 'dblclick', {
+                    	othis: $(this),
+                    	elem: $(this).prev(),
+                    	value: $(this).prev().val(),
+                    });
                 // }
                 if (dblshow) {
                     clearTimeout(timer);
