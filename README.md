@@ -143,7 +143,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 | getMaxDept(dst)              | 获取树的最大深度                                             |
 | **checkAll(dst)**            | 全选所有节点                                                 |
 | **uncheckAll(dst)**          | 取消选中所有节点                                             |
-| showChecked(dst)             | 显示所有选中节点对应层级（无论父级节点是否显示）             |
+| showChecked(dst)             | 显示所有选中节点对应层级（无论父级节点是否显示，均会级联呈现） |
 | showAll(dst)                 | 显示整颗树                                                   |
 | closeAll(dst)                | 关闭整颗树                                                   |
 | toggleAll(dst)               | 树的显示/关闭切换                                            |
