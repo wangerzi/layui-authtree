@@ -235,11 +235,20 @@ $.ajax({
         console.log(selectList);
         // 渲染单选框
         var string =  laytpl($('#LAY-auth-tree-convert-select').html()).render({
+            // 为了 layFilter 的唯一性，使用模板渲染的方式传递
+            layFilter: 'LAY-auth-tree-convert-select-input',
             list: selectList,
+            code: JSON.stringify(res, null, 2),
         });
         $('#LAY-auth-tree-convert-select-dom').html(string);
+        layui.code({
+            title: '返回的树状数据'
+        });
         form.render('select');
-        // TODO::form.on('select(LAY-FILTER)')监听选中
+        // 使用form.on('select(LAY-FILTER)')监听选中
+        form.on('select(LAY-auth-tree-convert-select-input)', function(data){
+            console.log('选中信息', data);
+        });
     },
     error: function(xml, errstr, err) {
         layer.alert(errstr+'，获取样例数据失败，请检查是否部署在本地服务器中！');
@@ -255,13 +264,15 @@ $.ajax({
 	<div class="layui-form-item">
 		<label class="layui-form-label">转换结果</label>
 		<div class="layui-input-block">
-			<select name="authid" class="layui-input">
+			<select name="authid" class="layui-input" lay-filter="{{d.layFilter}}">
 				{{# layui.each(d.list, function(index, item) { }}
-				<option vlaue="{{item.value}}">{{item.name}}</option>
+				<option value="{{item.value}}" {{item.checked?'selected':''}} {{item.disabled?'disabled':''}}>{{item.name}}</option>
 				{{# });}}
 			</select>
 		</div>
 	</div>
+	<blockquote class="layui-elem-quote">注：如果返回的是列表数据而非树状数据，可以先进行『列表转树』操作。<br>往后如果对这方面的效率有需求，请联系我添加一个 『列表转下拉树』的功能！</blockquote>
+	<pre class="layui-code">{{d.code}}</pre>
 </form>
 </script>
 ```
