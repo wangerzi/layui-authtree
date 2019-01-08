@@ -3,7 +3,7 @@
 * @Date:   2018-03-16 18:24:47
 * @Version: v1.2.2
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2019-01-07 16:01:17
+* @Last Modified time: 2019-01-08 12:48:44
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -114,6 +114,7 @@ layui.define(['jquery', 'form'], function(exports){
 				checkType: this.checkType,
 				prefixChildStr: opt.prefixChildStr,
 			}));
+			obj.showChecked(dst);
 			form.render();
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
@@ -251,6 +252,14 @@ layui.define(['jquery', 'form'], function(exports){
 			});
 			str += '</div>';
 			return str;
+		},
+		/**
+		 * 显示到已选中的最高层级
+		 * @param  {[type]} dst [description]
+		 * @return {[type]}     [description]
+		 */
+		showChecked: function(dst) {
+			$(dst).find('.authtree-checkitem:checked').parents('.auth-child').show();
 		},
 		/**
 		 * 将普通列表无限递归转换为树
