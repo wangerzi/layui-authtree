@@ -3,7 +3,7 @@
 * @Date:   2018-03-16 18:24:47
 * @Version: v1.2.2
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2019-01-08 12:48:44
+* @Last Modified time: 2019-01-09 17:48:22
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
@@ -11,7 +11,7 @@ layui.define(['jquery', 'form'], function(exports){
 	form = layui.form;
 	var MOD_NANE = 'authtree';
 
-	obj = {
+	var obj = {
 		// 渲染 + 绑定事件
 		openIconContent: '',
 		closeIconContent: '',
