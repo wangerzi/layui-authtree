@@ -34,14 +34,14 @@ layui.define(['jquery', 'form'], function(exports){
 			return layui.onevent.call(this, MOD_NANE, events, callback);
 		},
 		/**
-		 * 渲染DOM并绑定事件
-		 * @param  {[type]} dst       [目标ID，如：#test1]
-		 * @param  {[type]} trees     [数据，格式：{}]
-		 * @param  {[type]} inputname [上传表单名]
-		 * @param  {[type]} layfilter [lay-filter的值]
-		 * @param  {[type]} openall [是否展开全部]
-		 * @return {[type]}           [description]
-		 */
+		* 渲染DOM并绑定事件
+		* @param  {[type]} dst       [目标ID，如：#test1]
+		* @param  {[type]} trees     [数据，格式：{}]
+		* @param  {[type]} inputname [上传表单名]
+		* @param  {[type]} layfilter [lay-filter的值]
+		* @param  {[type]} openall [是否展开全部]
+		* @return {[type]}           [description]
+		*/
 		render: function(dst, trees, opt) {
 			// 表单名称配置
 			var inputname = opt.inputname ? opt.inputname : 'menuids[]';
@@ -67,9 +67,9 @@ layui.define(['jquery', 'form'], function(exports){
 			// 自动选择直属父级节点
 			var autochecked = typeof opt.autochecked !== 'undefined' ? opt.autochecked : true;
 			opt.autochecked = autochecked;
-            // 是否隐藏左侧 单选/多选的选框 -- 特殊需求，一般用于单选树并且不用
-            var hidechoose = typeof opt.hidechoose !== 'undefined' ? opt.hidechoose : false;
-            opt.hidechoose = hidechoose;
+			// 是否隐藏左侧 单选/多选的选框 -- 特殊需求，一般用于单选树并且不用
+			var hidechoose = typeof opt.hidechoose !== 'undefined' ? opt.hidechoose : false;
+			opt.hidechoose = hidechoose;
 			// 有子节点的前显字符配置
 			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
 			// 单选、多选配置
@@ -89,6 +89,12 @@ layui.define(['jquery', 'form'], function(exports){
 			this.halfCheckedIconContent = opt.halfCheckedIconContent;
 			opt.notCheckedIconContent = opt.notCheckedIconContent ? opt.notCheckedIconContent : '&#xe605;';
 			this.notCheckedIconContent = opt.notCheckedIconContent;
+			// 渲染配置参数
+			opt.checkedKey = opt.checkedKey ? opt.checkedKey : 'checked';
+			opt.childKey = opt.childKey ? opt.childKey : 'list';
+			opt.disabledKey = opt.disabledKey ? opt.disabledKey : 'disabled';
+			opt.nameKey = opt.nameKey ? opt.nameKey : 'name';
+			opt.valueKey = opt.valueKey ? opt.valueKey : 'value';
 
 			// 不启用双击展开，单击不用延迟
 			var dblisten = true;
@@ -113,6 +119,12 @@ layui.define(['jquery', 'form'], function(exports){
 				openchecked: openchecked,
 				checkType: this.checkType,
 				prefixChildStr: opt.prefixChildStr,
+				// 配置参数
+				checkedKey: opt.checkedKey,
+				childKey: opt.childKey,
+				disabledKey: opt.disabledKey,
+				nameKey: opt.nameKey,
+				valueKey: opt.valueKey,
 			}));
 			obj.showChecked(dst);
 			form.render();
@@ -132,11 +144,11 @@ layui.define(['jquery', 'form'], function(exports){
 			// 	/*console.log(childs);*/
 			// 	form.render('checkbox');
 			// });
-			
+
 			// 解决单击和双击冲突问题的 timer 变量
 			var timer = 0;
 			$(dst).find('.auth-single:first').unbind('click').on('click', '.layui-form-checkbox,.layui-form-radio', function(event){
-                // window.event? window.event.cancelBubble = true : event.stopPropagation();
+				// window.event? window.event.cancelBubble = true : event.stopPropagation();
 				var that = this;
 				clearTimeout(timer);
 				// 双击判断需要的延迟处理
@@ -178,24 +190,24 @@ layui.define(['jquery', 'form'], function(exports){
 				obj.iconToggle(dst, this);
 			});
 			/*双击展开*/
-            $(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
-                // 触发时间 > 0，才触发双击事件
-                // opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
-                // if (opt.dbltimeout > 0) {
-                    obj._triggerEvent(dst, 'dblclick', {
-                    	othis: $(this),
-                    	elem: $(this).prev(),
-                    	value: $(this).prev().val(),
-                    });
-                // }
-                if (dblshow) {
-                    clearTimeout(timer);
-                    obj.iconToggle(dst, $(this).prevAll('.auth-icon:first'));
-                }
-            }).on('selectstart', function(){
-                // 屏蔽双击选中文字
-                return false;
-            });
+			$(dst).find('.auth-single:first').unbind('dblclick').on('dblclick', '.layui-form-checkbox,.layui-form-radio', function(e){
+				// 触发时间 > 0，才触发双击事件
+				// opt.dbltimeout 是用户真实设定的超时时间，与 dbltimeout 不一样
+				// if (opt.dbltimeout > 0) {
+				obj._triggerEvent(dst, 'dblclick', {
+					othis: $(this),
+					elem: $(this).prev(),
+					value: $(this).prev().val(),
+				});
+				// }
+				if (dblshow) {
+					clearTimeout(timer);
+					obj.iconToggle(dst, $(this).prevAll('.auth-icon:first'));
+				}
+			}).on('selectstart', function(){
+				// 屏蔽双击选中文字
+				return false;
+			});
 		},
 		// 自动关闭 - 如果兄弟节点均没选中，递归取消上级元素选中状态，传入的是 .auth-status 节点，递归 .auth-status 上级节点
 		_autoclose: function(obj) {
@@ -234,39 +246,46 @@ layui.define(['jquery', 'form'], function(exports){
 			var openall = opt.openall;
 			var str = '<div class="auth-single">';
 
+			// 参数配置
+			var checkedKey = opt.checkedKey;
+			var childKey = opt.childKey;
+			var disabledKey = opt.disabledKey;
+			var nameKey = opt.nameKey;
+			var valueKey = opt.valueKey;
+
 			layui.each(tree, function(index, item){
-				var hasChild = (item.list&&(item.list.length || !$.isEmptyObject(item.list.length))) ? 1 : 0;
+				var hasChild = (item[childKey]&&(item[childKey].length || !$.isEmptyObject(item[childKey].length))) ? 1 : 0;
 				// 注意：递归调用时，this的环境会改变！
-				var append = hasChild ? obj.renderAuth(item.list, dept+1, opt) : '';
+				var append = hasChild ? obj.renderAuth(item[childKey], dept+1, opt) : '';
 				var openstatus = openall || (opt.openchecked && item.checked);
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
 				str += '<div><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
-					(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
-					(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
-					'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item.name+'" value="'+item.value+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
-					(item.checked?' checked="checked"':'')+
-					(item.disabled?' disabled':'')+
-					'> </div>'+
-					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
+				(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
+				(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
+				'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item[nameKey]+'" value="'+item[valueKey]+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
+				(item[checkedKey]?' checked="checked"':'')+
+				(item[disabledKey]?' disabled':'')+
+				'> </div>'+
+				' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
 			});
 			str += '</div>';
 			return str;
 		},
 		/**
-		 * 显示到已选中的最高层级
-		 * @param  {[type]} dst [description]
-		 * @return {[type]}     [description]
-		 */
+		* 显示到已选中的最高层级
+		* @param  {[type]} dst [description]
+		* @return {[type]}     [description]
+		*/
 		showChecked: function(dst) {
 			$(dst).find('.authtree-checkitem:checked').parents('.auth-child').show();
 		},
 		/**
-		 * 将普通列表无限递归转换为树
-		 * @param  {[type]} list       [普通的列表，必须包括 opt.primaryKey 指定的键和 opt.parentKey 指定的键]
-		 * @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey、disabledKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
-		 * @return {[type]}            [description]
-		 */
+		* 将普通列表无限递归转换为树
+		* @param  {[type]} list       [普通的列表，必须包括 opt.primaryKey 指定的键和 opt.parentKey 指定的键]
+		* @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey、disabledKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
+		* @return {[type]}            [description]
+		*/
 		listConvert: function(list, opt) {
 			opt.primaryKey = opt.primaryKey ? opt.primaryKey : 'id';
 			opt.parentKey = opt.parentKey ? opt.parentKey : 'pid';
@@ -329,11 +348,11 @@ layui.define(['jquery', 'form'], function(exports){
 			return child;
 		},
 		/**
-		 * 将树转为单选可用的 select，如果后台返回列表数据，可以先转换为 tree
-		 * @param  {[type]} tree [description]
-		 * @param  {[type]} opt  [description]
-		 * @return {[type]}      [description]
-		 */
+		* 将树转为单选可用的 select，如果后台返回列表数据，可以先转换为 tree
+		* @param  {[type]} tree [description]
+		* @param  {[type]} opt  [description]
+		* @return {[type]}      [description]
+		*/
 		treeConvertSelect: function(tree, opt) {
 			if (typeof tree.length !== 'number' || tree.length <= 0) {
 				return [];
@@ -401,8 +420,8 @@ layui.define(['jquery', 'form'], function(exports){
 		},
 		// 自动调整宽度以解决 form.render()生成元素兼容性问题，如果用户手动调用 form.render() 之后也需要调用此方法
 		autoWidth: function(dst) {
-            var tree = this.getRenderedInfo(dst);
-            var opt = tree.opt;
+			var tree = this.getRenderedInfo(dst);
+			var opt = tree.opt;
 			$(dst).css({
 				'whiteSpace': 'nowrap',
 				'maxWidth' : '100%',
@@ -417,18 +436,18 @@ layui.define(['jquery', 'form'], function(exports){
 					$width = $(this).find('span').width() + $(this).find('i').width() + 25;
 				}
 				$(this).width($width);
-                // 隐藏 单选/多选的左侧选框隐藏
+				// 隐藏 单选/多选的左侧选框隐藏
 				if (opt.hidechoose) {
-				    $(this).prevAll('i').css({
-                        zIndex: 2,
-                    });
-				    $(this).css({
-                        position: 'relative'
-                        ,left: function () {
-                            return '-'+$(this).css('padding-left');// 避免点击抖动的骚操作
-                        }
-				    }).find('i').hide();
-                }
+					$(this).prevAll('i').css({
+						zIndex: 2,
+					});
+					$(this).css({
+						position: 'relative'
+						,left: function () {
+							return '-'+$(this).css('padding-left');// 避免点击抖动的骚操作
+						}
+					}).find('i').hide();
+				}
 			});
 		},
 		// 触发自定义事件
@@ -439,6 +458,7 @@ layui.define(['jquery', 'form'], function(exports){
 				var opt = tree.opt;
 				var data = {
 					opt: opt,
+					tree: tree.trees,
 					dst: dst,
 					othis: origin,
 				};
@@ -452,10 +472,10 @@ layui.define(['jquery', 'form'], function(exports){
 				return false;
 			}
 		},
-        // 获取渲染过的信息
-        getRenderedInfo: function(dst) {
-		  return this.renderedTrees[dst];
-        },
+		// 获取渲染过的信息
+		getRenderedInfo: function(dst) {
+			return this.renderedTrees[dst];
+		},
 		// 动态获取最大深度
 		getMaxDept: function(dst){
 			var next = $(dst);
@@ -480,8 +500,8 @@ layui.define(['jquery', 'form'], function(exports){
 			obj.autoWidth(dst);
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
-			obj._triggerEvent(dst, 'change');	
-			obj._triggerEvent(dst, 'checkAll');	
+			obj._triggerEvent(dst, 'change');
+			obj._triggerEvent(dst, 'checkAll');
 		},
 		// 全不选
 		uncheckAll: function(dst){
@@ -493,7 +513,7 @@ layui.define(['jquery', 'form'], function(exports){
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
 			obj._triggerEvent(dst, 'change');
-			obj._triggerEvent(dst, 'uncheckAll');	
+			obj._triggerEvent(dst, 'uncheckAll');
 		},
 		// 显示整个树
 		showAll: function(dst) {

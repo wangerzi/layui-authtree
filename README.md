@@ -38,7 +38,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [ ] 部分选择权限的时候，他的父级前面不打对号，换个其他符号
 - [x] 可以配置单选/多选，并可选 lay-skin 属性
 - [x] 新增事件 dbclick 用于监听双击
-- [ ] 监听事件，新增 opt 参数，用于回调时便利的获取渲染参数，新增 tree 参数，用于把渲染数据传递过去
+- [x] 监听事件，新增 opt 参数，用于回调时便利的获取渲染参数，新增 tree 参数，用于把渲染数据传递过去
 - [x] 左侧单选/多选可以被隐藏
 - [x] 渲染/转换列表的时候可以禁止被选中
 - [ ] 可以支持 `reload` 方法用于重新渲染
@@ -165,12 +165,12 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 
 trees 对象中基础属性含义如下：
 
-| 参数名   | 描述              | 默认  |
-| -------- | ----------------- | ----- |
-| name     | 显示在外的名称    |       |
-| value    | 单选/多选表单的值 |       |
-| checked  | 是否选中          | false |
-| disabled | 是否不可选择      | false |
+| 参数名   | 描述                                    | 默认  |
+| -------- | --------------------------------------- | ----- |
+| name     | 显示在外的名称(可通过 nameKey改变)      |       |
+| value    | 单选/多选表单的值(可通过 valueKey 改变) |       |
+| checked  | 是否选中(可通过 checkedKey改变)         | false |
+| disabled | 是否不可选择(可通过 disabledKey改变)    | false |
 
 opt 参数如下：
 
@@ -191,6 +191,11 @@ opt 参数如下：
 | openIconContent  | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | ▼         |
 | closeIconContent | 折叠的前显字符配置（默认是方向向右的三角形，就像这样▶）      | ▶         |
 | prefixChildStr   | 有子节点的前显字符配置                                       | ├─        |
+| checkedKey       | 渲染 checked(选中状态)的属性名称                             | checked   |
+| childKey         | 渲染 子节点的属性名称                                        | list      |
+| disabledKey      | 渲染 disabled(禁止选中状态)的属性名称                        | disabled  |
+| nameKey          | 渲染 title(多选框的外显名称)的属性名称                       | name      |
+| valueKey         | 渲染 value(上传d值)的属性名称                                | value     |
 
 ##### 自动选中 用法描述：
 
@@ -365,6 +370,19 @@ var trees = authtree.listConvert(res.data.list, {
 | uncheckAll | 监听全不选(目前仅限手动操作的全不选)               | authtree.on('uncheckAll(layfilter)') |
 | deptChange | 监听层数改变（包括点击、展开、关闭、全部展开关闭） | authtree.on('deptChange(layfilter)') |
 | dblclick   | 监听双击事件                                       | authtree.on('dblclick(layfilter)')   |
+
+### change事件返回参数一览
+
+| 参数名称 | 描述                       |
+| -------- | -------------------------- |
+| dst      | 目标id                     |
+| oinput   | input的jQuery对象          |
+| opt      | 渲染本树的参数             |
+| othis    | 美化后的jQuery对象         |
+| tree     | 此树的树状数据             |
+| value    | 这个单选/多选的value属性值 |
+
+
 
 ## 功能概览：
 
