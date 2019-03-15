@@ -140,7 +140,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 					'notchecked', notchecked,"\n",
 					'leaf', leaf,"\n",
 					'lastChecked', lastChecked,"\n",
-					'lastNotChecked', lastNotChecked,"\n",
+					'lastNotChecked', lastNotChecked,"\n"
 				);
 			});
 			authtree.on('deptChange(lay-check-auth)', function(data) {
@@ -260,7 +260,7 @@ function getNodeStatus(dst){
 				type: 1,
 				title: $(this).data('title')+'-节点详情',
 				content: '['+$(this).data('content')+']',
-				tipsMore: true 
+				tipsMore: true
 			});
 		});
 	});
@@ -375,8 +375,8 @@ function listConvert(url) {
 						});
 						// 如果页面中多个树共存，需要注意 layfilter 需要不一样
 						authtree.render('#LAY-auth-tree-convert-index', trees, {
-							inputname: 'authids[]', 
-							layfilter: 'lay-check-convert-auth', 
+							inputname: 'authids[]',
+							layfilter: 'lay-check-convert-auth',
 							// openall: true,
 							autowidth: true,
 						});
