@@ -361,6 +361,8 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.currentDept = opt.currentDept ? opt.currentDept : 0;
 			// 子节点列表的Key
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
+      // 名称的key
+      opt.nameKey = opt.valueKey ? opt.valueKey : 'name';
 			// 值的key
 			opt.valueKey = opt.valueKey ? opt.valueKey : 'value';
 			// 选中的key - 仅支持字符串
@@ -393,7 +395,7 @@ layui.define(['jquery', 'form'], function(exports){
 				if (opt.childKey in item && item[opt.childKey] && item[opt.childKey].length > 0) {
 					child_flag = 1;
 				}
-				var name = item.name;
+				var name = item[opt.nameKey];
 				if (child_flag) {
 					name = opt.prefixChildStr + name;
 				} else {
