@@ -290,7 +290,7 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.primaryKey = opt.primaryKey ? opt.primaryKey : 'id';
 			opt.parentKey = opt.parentKey ? opt.parentKey : 'pid';
 			opt.startPid = opt.startPid ? opt.startPid : 0;
-			opt.currentDept = opt.currentDept ? opt.currentDept : 0;
+			opt.currentDept = opt.currentDept ? parseInt(opt.currentDept) : 0;
 			opt.maxDept = opt.maxDept ? opt.maxDept : 100;
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
 			opt.checkedKey = opt.checkedKey ? opt.checkedKey : 'checked';
@@ -358,7 +358,7 @@ layui.define(['jquery', 'form'], function(exports){
 				return [];
 			}
 			// 初始化层级
-			opt.currentDept = opt.currentDept ? opt.currentDept : 0;
+			opt.currentDept = opt.currentDept ? parseInt(opt.currentDept) : 0;
 			// 子节点列表的Key
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
       // 名称的key
