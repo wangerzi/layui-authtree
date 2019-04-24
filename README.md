@@ -48,6 +48,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [ ] layer 中的 authtree 渲染说明(特别说明 iframe 中的渲染问题和修改BUG后浏览器缓存问题)
 - [ ] render() 函数支持 checkedId 功能
 - [ ] render() 函数调用/点击时自动给所有已渲染的树 autoWidth()
+- [ ] 主题配置及相关说明
 
 ## BUG收集
 - [x] 插件BUG - 数据量达到150+会比较卡
