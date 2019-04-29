@@ -1,15 +1,15 @@
 /*
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
-* @Version: v1.2.2
+* @Version: v1.2.3
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2019-01-09 17:48:22
+* @Last Modified time: 2019-04-29 14:33:00
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
 	$ = layui.jquery;
 	form = layui.form;
-	var MOD_NANE = 'authtree';
+	var MOD_NAME = 'authtree';
 
 	var obj = {
 		// 渲染 + 绑定事件
@@ -31,7 +31,7 @@ layui.define(['jquery', 'form'], function(exports){
 		renderedTrees: {},
 		// 使用 layui 的监听事件
 		on: function(events, callback) {
-			return layui.onevent.call(this, MOD_NANE, events, callback);
+			return layui.onevent.call(this, MOD_NAME, events, callback);
 		},
 		/**
 		* 渲染DOM并绑定事件
@@ -126,13 +126,15 @@ layui.define(['jquery', 'form'], function(exports){
 				nameKey: opt.nameKey,
 				valueKey: opt.valueKey,
 			}));
-			obj.showChecked(dst);
+			if (openchecked) {
+        obj.showChecked(dst);
+			}
 			form.render();
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
 
 			// 开启自动宽度优化
-			obj.autoWidth(dst);
+			obj.autoWidthAll();
 			// 备注：如果使用form.on('checkbox()')，外部就无法使用form.on()监听同样的元素了（LAYUI不支持重复监听了）。
 			// form.on('checkbox('+layfilter+')', function(data){
 			// 	/*属下所有权限状态跟随，如果选中，往上走全部选中*/
@@ -181,7 +183,7 @@ layui.define(['jquery', 'form'], function(exports){
 						oinput: elem,
 						value: elem.val(),
 					});
-					obj.autoWidth(dst);
+					obj.autoWidthAll();
 				}, dbltimeout);
 				return false;
 			});
@@ -420,6 +422,13 @@ layui.define(['jquery', 'form'], function(exports){
 			}
 			return ansList;
 		},
+    autoWidthAll: function() {
+			for (var dst in this.renderedTrees) {
+				if (this.renderedTrees.hasOwnProperty(dst)) {
+					this.autoWidth(dst)
+				}
+			}
+		},
 		// 自动调整宽度以解决 form.render()生成元素兼容性问题，如果用户手动调用 form.render() 之后也需要调用此方法
 		autoWidth: function(dst) {
 			var tree = this.getRenderedInfo(dst);
@@ -468,8 +477,8 @@ layui.define(['jquery', 'form'], function(exports){
 					data = $.extend(data, other);
 				}
 				// 支持 dst 和 用户的配置的 layfilter 监听
-				layui.event.call(origin, MOD_NANE, events+'('+dst+')', data);
-				layui.event.call(origin, MOD_NANE, events+'('+opt.layfilter+')', data);
+				layui.event.call(origin, MOD_NAME, events+'('+dst+')', data);
+				layui.event.call(origin, MOD_NAME, events+'('+opt.layfilter+')', data);
 			} else {
 				return false;
 			}
@@ -499,7 +508,7 @@ layui.define(['jquery', 'form'], function(exports){
 			origin.find('.authtree-checkitem:not(:disabled):not(:checked)').prop('checked', true);
 			form.render('checkbox');
 			form.render('radio');
-			obj.autoWidth(dst);
+			obj.autoWidthAll();
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
 			obj._triggerEvent(dst, 'change');
@@ -511,7 +520,7 @@ layui.define(['jquery', 'form'], function(exports){
 			origin.find('.authtree-checkitem:not(:disabled):checked').prop('checked', false);
 			form.render('checkbox');
 			form.render('radio');
-			obj.autoWidth(dst);
+			obj.autoWidthAll();
 			// 变动则存一下临时状态
 			obj._saveNodeStatus(dst);
 			obj._triggerEvent(dst, 'change');
