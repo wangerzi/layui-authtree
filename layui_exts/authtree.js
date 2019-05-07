@@ -7,8 +7,8 @@
 */
 // 节点树
 layui.define(['jquery', 'form'], function(exports){
-	$ = layui.jquery;
-	form = layui.form;
+	var $ = layui.jquery;
+	var form = layui.form;
 	var MOD_NAME = 'authtree';
 
 	var obj = {
@@ -77,6 +77,9 @@ layui.define(['jquery', 'form'], function(exports){
 			this.checkType = opt.checkType;
 			// 皮肤可选择
 			opt.checkSkin = opt.checkSkin ? opt.checkSkin : 'primary';
+			// 主题定制
+			opt.theme = opt.theme ? opt.theme : '';
+			opt.themePath = opt.themePath ? opt.themePath : 'layui_exts/tree_themes/';
 			// 展开、折叠节点的前显字符配置
 			opt.openIconContent = opt.openIconContent ? opt.openIconContent : '&#xe625;';
 			this.openIconContent = opt.openIconContent;
@@ -112,6 +115,14 @@ layui.define(['jquery', 'form'], function(exports){
 			// 记录渲染过的树
 			obj.renderedTrees[dst] = {trees: trees, opt: opt};
 
+			// 主题定制
+      if (typeof opt.theme === 'string' && opt.theme !== '') {
+				$(dst).addClass(opt.theme)
+        layui.link(opt.themePath + opt.theme + '.css')
+			}
+			if (opt.hidechoose) {
+				$(dst).addClass('auth-tree-hidechoose');
+			}
 			$(dst).html(obj.renderAuth(trees, 0, {
 				inputname: inputname,
 				layfilter: layfilter,
@@ -262,7 +273,7 @@ layui.define(['jquery', 'form'], function(exports){
 				var openstatus = openall || (opt.openchecked && item.checked);
 
 				// '+new Array(dept * 4).join('&nbsp;')+'
-				str += '<div><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
+				str += '<div class="auth-skin"><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
 				(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
 				(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
 				'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item[nameKey]+'" value="'+item[valueKey]+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
