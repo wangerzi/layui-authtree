@@ -162,8 +162,6 @@ authtree.render('#LAY-auth-tree-hide-choose-dom', trees, {
 });
 ```
 
-主题
-
 ## 数据库设计和后台程序参考
 
 正在完善中....
