@@ -15,6 +15,9 @@ Version: v1.0.0
     top: 6px;
     padding-left: 17px;
 }
+.auth-skin-default .auth-status > div.layui-form-radio {
+    padding-left: 5px;
+}
 /*美化的多选框/单选框DOM*/
 .auth-skin-default .auth-status > div > span {
     -moz-border-radius: 5px;
