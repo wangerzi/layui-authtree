@@ -147,6 +147,7 @@ function treeConvertSelect(url) {
             // 更多传入参数及其具体意义请查看文档
             var selectList = authtree.treeConvertSelect(res.data.trees, {
               childKey: 'list',
+              // checkedKey: ['glygl-tjgly'],
             });
             console.log(selectList);
             // 渲染单选框
@@ -319,6 +320,8 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
         // ,openall: true
         // ,hidechoose: true
         // ,checkType: 'radio'
+        // ,checkedKey: 'checked'
+        // ,disabledKey: 'disabled'
         // ,checkSkin: 'primary'
         ,'theme': 'auth-skin-default'
         // ,'themePath': 'themes/'

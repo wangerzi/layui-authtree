@@ -150,7 +150,7 @@
       <div class="layui-input-block">
         <select name="authid" class="layui-input" lay-filter="{{d.layFilter}}">
           {{# layui.each(d.list, function(index, item) { }}
-          <option value="{{item.value}}" selected="{{item.checked?'selected':'false'}}" disabled="{{item.disabled?'disabled':'false'}}">{{item.name}}</option>
+          <option value="{{item.value}}" {{item.checked?'selected':''}} {{item.disabled?'disabled':''}}>{{item.name}}</option>
           {{# });}}
         </select>
       </div>

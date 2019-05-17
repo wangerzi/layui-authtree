@@ -9,7 +9,7 @@
     			{"name": "添加角色", "value": "yhzgl-jsgl-tjjs", "checked": true, "disabled": false},
     			{"name": "角色列表", "value": "yhzgl-jsgl-jslb", "checked": false, "disabled": false}
     		]},
-        {"name": "管理员管理", "value": "glygl", "checked": false, "disabled": false, "list":[
+        {"name": "管理员管理", "value": "glygl-tjgly", "checked": false, "disabled": false, "list":[
           {"name": "添加管理员", "value": "glygl-tjgly", "checked": false, "disabled": false},
           {"name": "管理员列表", "value": "glygl-glylb", "checked": false, "disabled": true},
           {"name": "管理员管理", "value": "glygl-glylb", "checked": false, "disabled": true}
