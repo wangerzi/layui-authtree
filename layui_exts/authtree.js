@@ -295,11 +295,7 @@ layui.define(['jquery', 'form'], function(exports){
 			if (typeof dynamicKey === "string" || typeof dynamicKey === 'number') {
 				isChecked = item[dynamicKey];
 			} else if(typeof dynamicKey === 'object') {
-				if ($.inArray(item[valueKey], dynamicKey) !== -1) {
-					isChecked = true;
-				} else {
-					isChecked = false;
-				}
+				isChecked = $.inArray(item[valueKey], dynamicKey) !== -1;
 			} else {
 				isChecked = false;
 			}
@@ -453,7 +449,7 @@ layui.define(['jquery', 'form'], function(exports){
 				'maxWidth' : '100%',
 			});
 			// 自动刷新多选框半选状态
-      this.autoNodeRender(dst)
+      // this.autoNodeRender(dst)
 			// 自动宽度调整的逻辑
 			$(dst).find('.layui-form-checkbox,.layui-form-radio,.layui-form-audio').each(function(index, item){
 				var width = $(this).find('span').width() + $(this).find('i').width() + 25;
@@ -674,7 +670,7 @@ layui.define(['jquery', 'form'], function(exports){
 			var lastCheckedNode = currentChecked;
 
 			var data = [];
-			for (i in lastCheckedNode) {
+			for (var i in lastCheckedNode) {
 				if ($.inArray(lastCheckedNode[i], this.notCheckedNode[dst]) !== -1) {
 					data.push(lastCheckedNode[i]);
 				}
@@ -699,7 +695,7 @@ layui.define(['jquery', 'form'], function(exports){
 			var lastNotCheckedNode = currentNotChecked;
 
 			var data = [];
-			for (i in lastNotCheckedNode) {
+			for (var i in lastNotCheckedNode) {
 				if ($.inArray(lastNotCheckedNode[i], this.checkedNode[dst]) !== -1) {
 					data.push(lastNotCheckedNode[i]);
 				}
