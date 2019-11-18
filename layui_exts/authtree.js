@@ -275,16 +275,23 @@ layui.define(['jquery', 'form'], function(exports){
 				var openstatus = openall || (opt.openchecked && item.checked);
 				var isChecked = _this._getStatusByDynamicKey(item, opt.checkedKey, opt.valueKey);
 				var isDisabled = _this._getStatusByDynamicKey(item, opt.disabledKey, opt.valueKey);
+				var type = _this._getStatusByDynamicKey(item, opt.authType, opt.valueKey);
 
-				// '+new Array(dept * 4).join('&nbsp;')+'
-				str += '<div class="auth-skin"><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
-				(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
-				(dept > 0 ? ('<span>'+opt.prefixChildStr+' </span>'):'')+
-				'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item[nameKey]+'" value="'+item[valueKey]+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
-				(isChecked?' checked="checked"':'')+
-				(isDisabled?' disabled':'')+
-				'> </div>'+
-				' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'padding-left:40px;"> '+append+'</div></div>'
+				if (item.type) {
+					str += '<div class="auth-row"><div class="auth-row-item">' +
+						(hasChild?'':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>');
+				} else {
+					// '+new Array(dept * 4).join('&nbsp;')+'
+					str += '<div class="auth-skin"><div class="auth-status" style="display: flex;flex-direction: row;align-items: flex-end;"> '+
+						(hasChild?'<i class="layui-icon auth-icon '+(openstatus?'active':'')+'" style="cursor:pointer;">'+(openstatus?obj.openIconContent:obj.closeIconContent)+'</i>':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>')+
+						(dept > 0 ? ('<span class="auth-prefix">'+opt.prefixChildStr+' </span>'):'');
+				}
+				str+=
+					'<input class="authtree-checkitem" type="'+opt.checkType+'" name="'+inputname+'" title="'+item[nameKey]+'" value="'+item[valueKey]+'" lay-skin="primary" lay-filter="'+layfilter+'" '+
+					(isChecked?' checked="checked"':'')+
+					(isDisabled?' disabled':'')+
+					'> </div>'+
+					' <div class="auth-child" style="'+(openstatus ?'':'display:none;')+'"> '+append+'</div></div>'
 			});
 			str += '</div>';
 			return str;
@@ -319,6 +326,7 @@ layui.define(['jquery', 'form'], function(exports){
 			opt.primaryKey = opt.primaryKey ? opt.primaryKey : 'id';
 			opt.parentKey = opt.parentKey ? opt.parentKey : 'pid';
 			opt.startPid = opt.startPid ? opt.startPid : 0;
+			opt.authType = opt.authType ? opt.authType : 'type';
 			opt.currentDept = opt.currentDept ? parseInt(opt.currentDept) : 0;
 			opt.maxDept = opt.maxDept ? opt.maxDept : 100;
 			opt.childKey = opt.childKey ? opt.childKey : 'list';
@@ -348,6 +356,7 @@ layui.define(['jquery', 'form'], function(exports){
 						}
 						node['name'] = item[opt.nameKey];
 						node['value'] = item[opt.valueKey];
+						node['type'] = item[opt.authType] || 0;
 						// 禁用/选中节点的两种渲染方式
 						node['checked'] = this._getStatusByDynamicKey(item, opt.checkedKey, opt.valueKey);
 						node['disabled'] = this._getStatusByDynamicKey(item, opt.disabledKey, opt.valueKey);
@@ -460,7 +469,8 @@ layui.define(['jquery', 'form'], function(exports){
 					$('#layui-authtree-get-width').remove();
 				} else {
 				}
-				$(this).width(width);
+
+				//$(this).width(width);
 				// 隐藏 单选/多选的左侧选框隐藏
 				if (opt.hidechoose) {
 					$(this).prevAll('i').css({
