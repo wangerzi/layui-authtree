@@ -1,0 +1,142 @@
+/**
+ * Author: Byron Sampson
+ * Email: xiaobo.sun@qq.com
+ * Name: auth-skin-tree
+ * Comment: 权限树主题
+ * Version: v1.0.0
+*/
+
+.auth-skin-tree .auth-child {
+    padding-left: 18px;
+}
+.auth-skin-tree .auth-status {
+    margin-top: -12px;
+}
+.auth-skin-tree .auth-status > i.layui-icon {
+    width: 16px;
+    text-align: center;
+}
+.auth-skin-tree .auth-status > div {
+    position: relative;
+    top: 4px;
+    padding-left: 17px;
+}
+.auth-skin-tree .auth-status > div.layui-form-radio {
+    padding-left: 5px;
+}
+
+/*美化的多选框/单选框DOM*/
+.auth-skin-tree .auth-status > div > span {
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 3px 8px;
+    text-decoration: none;
+
+    position: relative;
+    top: -3px;
+}
+
+.auth-skin-tree .auth-skin {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px 5px 0 5px;
+    position: relative;
+    color: #009688;
+}
+
+.auth-skin-tree > .auth-single > .auth-skin {
+
+}
+
+.auth-skin-tree .auth-skin::before, .auth-skin-tree .auth-skin::after {
+    content: '';
+    left: -10px;
+    position: absolute;
+    right: auto;
+    z-index: -1;
+}
+
+.auth-skin-tree .auth-skin::before {
+    border-left: 1px dashed #009688;
+    bottom: 50px;
+    height: 100%;
+    top: 0;
+    width: 1px
+}
+
+.auth-skin-tree .auth-skin::after {
+    height: 20px;
+    top: 25px;
+    width: 25px
+}
+
+.auth-skin-tree .auth-row {
+    display: inline-block;
+    margin-left: 6px;
+}
+.auth-skin-tree .auth-row .auth-row-item .layui-form-checkbox[lay-skin=primary] span{
+    color: #777;
+}
+
+
+.auth-skin-tree .auth-prefix {
+    width: 24px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.auth-skin-tree > .auth-single > .auth-skin {
+}
+.auth-skin-tree > .auth-single .auth-single .auth-leaf,
+.auth-skin-tree > .auth-single .auth-single .auth-icon{
+    position: absolute;
+}
+.auth-skin-tree > .auth-single .auth-single .auth-icon {
+    background-color: #fff;
+}
+
+.auth-skin-tree > .auth-single > .auth-skin::before, .auth-skin-tree > .auth-single > .auth-skin::after {
+    border: 0
+}
+
+.auth-skin-tree > .auth-single > .auth-skin > .auth-status > i.layui-icon {
+    width: 22px;
+    text-align: left;
+}
+
+.auth-skin-tree > .auth-single > .auth-skin > .auth-status > i.auth-leaf {
+    position: relative;
+    opacity: 100!important;
+}
+
+.auth-skin-tree > .auth-single > .auth-skin > .auth-status > i.auth-leaf:before {
+    position: absolute;
+    top: 1px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    font-family: layui-icon!important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #C9C9C9!important;
+    content: "\e623";
+}
+
+.auth-skin-tree > .auth-single > .auth-skin:last-child::before {
+    height: 30px
+}
+/*隐藏左侧操作的特殊样式*/
+.auth-skin-tree.auth-tree-hidechoose .auth-status > span {
+    display: none;
+}
+.auth-skin-tree.auth-tree-hidechoose .auth-status > div > span {
+    padding-left: 3px;
+}
+.auth-skin-tree.auth-tree-hidechoose .auth-status  > i {
+    position: relative;
+    top: 4px;
+}

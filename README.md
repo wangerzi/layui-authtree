@@ -148,6 +148,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
 | ------------------- | ------ | --------------------------------- | ----------------------------------------------- | ---------- |
 | auth-skin-default   | v1.0.0 | Jeffrey Wang(admin@wj2015.com)    | 默认主题，感谢lipengfei886@qq.com提供的基础样式 | 2019-05-07 |
 | auth-skin-universal | v1.0.0 | lipengfei886(lipengfei886@qq.com) | lipengfei886@qq.com提供的绿色背景样式           | 2019-05-09 |
+| auth-skin-tree   | v1.0.0 | Byron Sampson(xiaobo.sun@qq.com)    | 权限树主题 | 2019-11-18 |
 
 ### 主题使用方式
 
@@ -204,6 +205,7 @@ trees 对象中基础属性含义如下：
 | value    | 单选/多选表单的值(可通过 valueKey 改变) |       |
 | checked  | 是否选中(可通过 checkedKey改变)         | false |
 | disabled | 是否不可选择(可通过 disabledKey改变)    | false |
+| type | 是否在一行上显示(可通过 authType 改变)    | false |
 
 opt 参数如下：
 
