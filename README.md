@@ -606,4 +606,4 @@ v1.3 支持节点不可选择、主题配置、新增半选中状态、选中/�
 
 ##### github:
 
-感谢 [adminpass](https://github.com/adminpass) 、[MrZhouL](https://github.com/MrZhouL)、[lzjlxebr](https://github.com/lzjlxebr)、[lintiansheng](https://github.com/lintiansheng) 等人提供的反馈和建议
+感谢 [adminpass](https://github.com/adminpass) 、[MrZhouL](https://github.com/MrZhouL)、[lzjlxebr](https://github.com/lzjlxebr)、[lintiansheng](https://github.com/lintiansheng) 、[5ini99](https://github.com/5ini99)等人提供的反馈和建议
