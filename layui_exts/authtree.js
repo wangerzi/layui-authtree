@@ -1,7 +1,7 @@
 /*
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
-* @Version: v1.2.3
+* @Version: v1.2.4
 * @Last Modified by:   Jeffrey Wang
 * @Last Modified time: 2019-04-29 14:33:00
 */
