@@ -324,7 +324,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
         // ,checkedKey: 'checked'
         // ,disabledKey: 'disabled'
         // ,checkSkin: 'primary'
-        ,'theme': 'auth-skin-universal'
+        ,'theme': 'auth-skin-default'
         // ,'themePath': 'themes/'
         ,autowidth: true
       });
