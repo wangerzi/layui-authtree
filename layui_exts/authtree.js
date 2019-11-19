@@ -73,6 +73,9 @@ layui.define(['jquery', 'form'], function(exports){
 			// 是否开启半选
 			var halfchoose = typeof opt.halfchoose !== 'undefined' ? opt.halfchoose : false;
 			opt.halfchoose = halfchoose;
+			// 收起叶子节点（排列于一行）
+			var collapseLeafNode = typeof opt.collapseLeafNode !== 'undefined' ? opt.collapseLeafNode : true;
+			opt.collapseLeafNode = collapseLeafNode;
 			// 有子节点的前显字符配置
 			opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
 			// 单选、多选配置
@@ -139,6 +142,7 @@ layui.define(['jquery', 'form'], function(exports){
 				disabledKey: opt.disabledKey,
 				nameKey: opt.nameKey,
 				valueKey: opt.valueKey,
+				collapseLeafNode: opt.collapseLeafNode,
 			}));
 			if (openchecked) {
         obj.showChecked(dst);
@@ -275,10 +279,10 @@ layui.define(['jquery', 'form'], function(exports){
 				var openstatus = openall || (opt.openchecked && item.checked);
 				var isChecked = _this._getStatusByDynamicKey(item, opt.checkedKey, opt.valueKey);
 				var isDisabled = _this._getStatusByDynamicKey(item, opt.disabledKey, opt.valueKey);
-				var type = _this._getStatusByDynamicKey(item, opt.authType, opt.valueKey);
 
-				if (item.type) {
-					str += '<div class="auth-row"><div class="auth-row-item">' +
+				var rowFlag = !hasChild && opt.collapseLeafNode;
+				if (rowFlag) {
+					str += '<div class="auth-row auth-skin"><div class="auth-row-item auth-status" style="display: flex;flex-direction: row;align-items: flex-end;">' +
 						(hasChild?'':'<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>');
 				} else {
 					// '+new Array(dept * 4).join('&nbsp;')+'

@@ -317,13 +317,14 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
         // ,autoclose: false
         // ,autochecked: false
         // ,openchecked: false
+        // ,'collapseLeafNode': false
         // ,openall: true
         // ,hidechoose: true
         // ,checkType: 'radio'
         // ,checkedKey: 'checked'
         // ,disabledKey: 'disabled'
         // ,checkSkin: 'primary'
-        ,'theme': 'auth-skin-default'
+        ,'theme': 'auth-skin-universal'
         // ,'themePath': 'themes/'
         ,autowidth: true
       });
