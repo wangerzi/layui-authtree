@@ -74,7 +74,7 @@ layui.define(['jquery', 'form'], function (exports) {
             var halfchoose = typeof opt.halfchoose !== 'undefined' ? opt.halfchoose : false;
             opt.halfchoose = halfchoose;
             // 收起叶子节点（排列于一行）
-            var collapseLeafNode = typeof opt.collapseLeafNode !== 'undefined' ? opt.collapseLeafNode : true;
+            var collapseLeafNode = typeof opt.collapseLeafNode !== 'undefined' ? opt.collapseLeafNode : false;
             opt.collapseLeafNode = collapseLeafNode;
             // 有子节点的前显字符配置
             opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
