@@ -104,6 +104,8 @@ layui.define(['jquery', 'form'], function (exports) {
             opt.disabledKey = opt.disabledKey ? opt.disabledKey : 'disabled';
             opt.nameKey = opt.nameKey ? opt.nameKey : 'name';
             opt.valueKey = opt.valueKey ? opt.valueKey : 'value';
+			//避免与其他form组件冲突
+            opt.formFilter = opt.formFilter ? opt.formFilter : 't1';
 
             // 不启用双击展开，单击不用延迟
             var dblisten = true;
@@ -147,7 +149,7 @@ layui.define(['jquery', 'form'], function (exports) {
             if (openchecked) {
                 obj.showChecked(dst);
             }
-            form.render();
+            form.render(null,opt.formFilter);
             // 变动则存一下临时状态
             obj._saveNodeStatus(dst);
 

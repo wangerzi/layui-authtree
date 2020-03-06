@@ -232,6 +232,7 @@ opt 参数如下：
 | valueKey             | 渲染 value(上传d值)的属性名称                                | value                   |
 | theme                | 主题名称（取自 [已上线主题列表](https://github.com/wangerzi/layui-authtree#%E5%B7%B2%E4%B8%8A%E7%BA%BF%E4%B8%BB%E9%A2%98%E5%88%97%E8%A1%A8)） |                         |
 | themePath            | 主题路径（配置时记得最后的反斜杠）                           | layui_exts/tree_themes/ |
+| formFilter           | layui的form表单lay-filter避免与其他form冲突                  | t1                      |
 
 ##### 自动选中 用法描述：
 
