@@ -327,6 +327,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
         ,'theme': 'auth-skin-default'
         // ,'themePath': 'themes/'
         ,autowidth: true
+        ,formFilter: 'authtree-submit-form' // 注意！！！如果不与其他插件render冲突，这个选填
       });
 
       // PS:使用 form.on() 会引起了事件冒泡延迟的BUG，需要 setTimeout()，并且无法监听全选/全不选

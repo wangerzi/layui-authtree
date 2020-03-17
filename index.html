@@ -66,7 +66,7 @@
         <legend>权限树扩展分享</legend>
       </fieldset>
       <!-- 此扩展能递归渲染一个权限树，点击深层次节点，父级节点中没有被选中的节点会被自动选中，单独点击父节点，子节点会全部 选中/去选中 -->
-      <form class="layui-form">
+      <form class="layui-form"  lay-filter="authtree-submit-form">
         <div class="layui-form-item">
           <label class="layui-form-label">角色名称</label>
           <div class="layui-input-block">
