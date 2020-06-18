@@ -76,6 +76,9 @@ layui.define(['jquery', 'form'], function (exports) {
             // 收起叶子节点（排列于一行）
             var collapseLeafNode = typeof opt.collapseLeafNode !== 'undefined' ? opt.collapseLeafNode : false;
             opt.collapseLeafNode = collapseLeafNode;
+            // 收起最后一层节点（排列于一行）
+            var collapseLastDepthNode = typeof opt.collapseLastDepthNode !== 'undefined' ? opt.collapseLastDepthNode : false;
+            opt.collapseLastDepthNode = collapseLastDepthNode;
             // 有子节点的前显字符配置
             opt.prefixChildStr = opt.prefixChildStr ? opt.prefixChildStr : '├─';
             // 单选、多选配置
@@ -104,7 +107,7 @@ layui.define(['jquery', 'form'], function (exports) {
             opt.disabledKey = opt.disabledKey ? opt.disabledKey : 'disabled';
             opt.nameKey = opt.nameKey ? opt.nameKey : 'name';
             opt.valueKey = opt.valueKey ? opt.valueKey : 'value';
-			//避免与其他form组件冲突
+            //避免与其他form组件冲突
             opt.formFilter = opt.formFilter ? opt.formFilter : '';
 
             // 不启用双击展开，单击不用延迟
@@ -145,15 +148,17 @@ layui.define(['jquery', 'form'], function (exports) {
                 nameKey: opt.nameKey,
                 valueKey: opt.valueKey,
                 collapseLeafNode: opt.collapseLeafNode,
+                collapseLastDepthNode: opt.collapseLastDepthNode,
+                treeDept: 0,
             }));
             if (openchecked) {
                 obj.showChecked(dst);
             }
             if (opt.formFilter) {
-                form.render(null,opt.formFilter);
+                form.render(null, opt.formFilter);
             } else {
-		form.render()
-	    }
+                form.render()
+            }
             // 变动则存一下临时状态
             obj._saveNodeStatus(dst);
 
@@ -286,7 +291,12 @@ layui.define(['jquery', 'form'], function (exports) {
                 var isChecked = _this._getStatusByDynamicKey(item, opt.checkedKey, opt.valueKey);
                 var isDisabled = _this._getStatusByDynamicKey(item, opt.disabledKey, opt.valueKey);
 
-                var rowFlag = !hasChild && opt.collapseLeafNode;
+                var rowFlag = false;
+                if (opt.collapseLastDepthNode) {
+                    rowFlag = dept === opt.treeDept;
+                } else if (opt.collapseLeafNode) {
+                    rowFlag = !hasChild && opt.collapseLeafNode;
+                }
                 if (rowFlag) {
                     str += '<div class="auth-row auth-skin"><div class="auth-row-item auth-status" style="display: flex;flex-direction: row;align-items: flex-end;">' +
                         (hasChild ? '' : '<i class="layui-icon auth-leaf" style="opacity:0;color: transparent;">&#xe626;</i>');
@@ -531,6 +541,17 @@ layui.define(['jquery', 'form'], function (exports) {
         // 获取渲染过的信息
         getRenderedInfo: function (dst) {
             return this.renderedTrees[dst];
+        },
+        // 获取树的高度（tree = [{name: 'xxx', child: [{name: 'xxx'}]}]）
+        getTreeMaxDept: function (tree, childKey, dept) {
+            dept = dept ? dept : 0;
+            for (var i = 0; i < tree.length; i++) {
+                var item = tree[i];
+                if (tree.hasOwnProperty(childKey) && typeof tree[childKey] === 'object') {
+                    return this.getTreeMaxDept(tree[childKey], childKey, dept + 1)
+                }
+            }
+            return dept;
         },
         // 动态获取最大深度
         getMaxDept: function (dst) {
