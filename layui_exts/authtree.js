@@ -1,9 +1,9 @@
 /*
 * @Author: Jeffrey Wang
 * @Date:   2018-03-16 18:24:47
-* @Version: v1.2.4
+* @Version: v1.3.0
 * @Last Modified by:   Jeffrey Wang
-* @Last Modified time: 2019-04-29 14:33:00
+* @Last Modified time: 2020-06-22
 */
 // 节点树
 layui.define(['jquery', 'form'], function (exports) {
@@ -149,7 +149,7 @@ layui.define(['jquery', 'form'], function (exports) {
                 valueKey: opt.valueKey,
                 collapseLeafNode: opt.collapseLeafNode,
                 collapseLastDepthNode: opt.collapseLastDepthNode,
-                treeDept: 0,
+                treeDept: this.getTreeMaxDept(trees, opt.childKey),
             }));
             if (openchecked) {
                 obj.showChecked(dst);
@@ -293,7 +293,7 @@ layui.define(['jquery', 'form'], function (exports) {
 
                 var rowFlag = false;
                 if (opt.collapseLastDepthNode) {
-                    rowFlag = dept === opt.treeDept;
+                    rowFlag = dept === opt.treeDept - 1;
                 } else if (opt.collapseLeafNode) {
                     rowFlag = !hasChild && opt.collapseLeafNode;
                 }
@@ -307,7 +307,7 @@ layui.define(['jquery', 'form'], function (exports) {
                         (dept > 0 ? ('<span class="auth-prefix">' + opt.prefixChildStr + ' </span>') : '');
                 }
                 str +=
-                    '<input class="authtree-checkitem" type="' + opt.checkType + '" name="' + inputname + '" title="' + item[nameKey] + '" value="' + item[valueKey] + '" lay-skin="primary" lay-filter="' + layfilter + '" ' +
+                    '<input class="authtree-checkitem authtree-dept-'+dept+' '+(dept===opt.treeDept?'authtree-dept-max':'')+'" type="' + opt.checkType + '" name="' + inputname + '" title="' + item[nameKey] + '" value="' + item[valueKey] + '" lay-skin="primary" lay-filter="' + layfilter + '" ' +
                     (isChecked ? ' checked="checked"' : '') +
                     (isDisabled ? ' disabled' : '') +
                     '> </div>' +
@@ -545,13 +545,20 @@ layui.define(['jquery', 'form'], function (exports) {
         // 获取树的高度（tree = [{name: 'xxx', child: [{name: 'xxx'}]}]）
         getTreeMaxDept: function (tree, childKey, dept) {
             dept = dept ? dept : 0;
+            if (dept === 0 && tree.length) {
+                dept = 1;
+            }
+            var maxDept = dept;
             for (var i = 0; i < tree.length; i++) {
                 var item = tree[i];
-                if (tree.hasOwnProperty(childKey) && typeof tree[childKey] === 'object') {
-                    return this.getTreeMaxDept(tree[childKey], childKey, dept + 1)
+                if (item.hasOwnProperty(childKey) && typeof item[childKey] === 'object' && item[childKey].length) {
+                    var current = this.getTreeMaxDept(item[childKey], childKey, dept + 1)
+                    if (current > maxDept) {
+                        maxDept = current;
+                    }
                 }
             }
-            return dept;
+            return maxDept;
         },
         // 动态获取最大深度
         getMaxDept: function (dst) {

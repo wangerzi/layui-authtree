@@ -326,6 +326,7 @@ layui.use(['jquery', 'authtree', 'form', 'layer'], function(){
         // ,checkSkin: 'primary'
         ,'theme': 'auth-skin-default'
         // ,'themePath': 'themes/'
+        ,collapseLastDepthNode: true
         ,autowidth: true
         ,formFilter: 'authtree-submit-form' // 注意！！！如果不与其他插件render冲突，这个选填
       });

@@ -50,6 +50,7 @@ layui自身提供一个tree树形菜单，但是并不适用于权限控制中�
 - [x] render() 函数调用/点击时自动给所有已渲染的树 autoWidth()
 - [x] 主题配置及相关说明
 - [x] 叶子节点横排
+- [x] 末级节点横排
 
 ## BUG收集
 - [x] 插件BUG - 数据量达到150+会比较卡
@@ -220,6 +221,7 @@ opt 参数如下：
 | **autochecked**      | 选中节点后,是否自动选中直属父级并且选中所有子节点            | true                    |
 | **autoclose**        | 取消节点选中后,是否自动取消父级选中(当兄弟节点均为未选中时)  | true                    |
 | **collapseLeafNode** | 叶子节点横排开关（仅使用主题有效）                           | false                    |
+| **collapseLastDepthNode** | 末级节点横排开关（仅使用主题有效）                           | false                    |
 | checkType            | 选择表单类型，checkbox: 多选，radio: 单选                    | checkbox                |
 | checkSkin            | 表单渲染的 lay-skin 参数，详见官方文档                       | primary                 |
 | openIconContent      | 展开的前显字符配置（默认是方向向下的三角形，就像这样▼）      | ▼                       |
